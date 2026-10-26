@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,7 +67,7 @@
 
           <div class="hero-actions">
             <a class="button" href="#projects">Explore My Work ↗</a>
-            <a class="button button-outline" href="resume.pdf" download>
+            <a class="button button-outline" href="Alex_Morgan_Data_Analyst_Learning_Portfolio.pdf" download>
               Download Resume ↓
             </a>
           </div>
