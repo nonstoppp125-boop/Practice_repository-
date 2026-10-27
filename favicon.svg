@@ -2,63 +2,20 @@
   <title id="t">Data Analyst Portfolio</title>
   <desc id="d">Three rising cyan bars with a connected trend line and data points on a dark navy rounded square.</desc>
 
-  <!-- Background -->
+  <!-- Background (EDIT HERE: rx="14" bodlale kona round hobe, 0 = square, 32 = circle) -->
   <rect width="64" height="64" rx="14" fill="#0b1220"/>
   <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#38bdf8" stroke-opacity=".28" stroke-width="1.5"/>
 
-  <!-- Data bars -->
+  <!-- Data bars (EDIT HERE: bar er nichu shobshomoy y + height = 52 rakho) -->
   <rect x="11" y="40" width="10" height="12" rx="2" fill="#0ea5e9" fill-opacity=".5"/>
   <rect x="27" y="32" width="10" height="20" rx="2" fill="#0ea5e9" fill-opacity=".8"/>
   <rect x="43" y="22" width="10" height="30" rx="2" fill="#38bdf8"/>
 
-  <!-- Trend line and data points -->
+  <!-- Trend line and data points (EDIT HERE: polyline points ar circle cx/cy same rakho) -->
   <polyline points="16,31 32,23 48,13" fill="none" stroke="#e6edf7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   <circle cx="16" cy="31" r="3.6" fill="#e6edf7" stroke="#0b1220" stroke-width="1.5"/>
   <circle cx="32" cy="23" r="3.6" fill="#e6edf7" stroke="#0b1220" stroke-width="1.5"/>
   <circle cx="48" cy="13" r="3.6" fill="#2dd4bf" stroke="#0b1220" stroke-width="1.5"/>
+
+  <!-- GUIDE: Rong: navy #0b1220, cyan #38bdf8, blue #0ea5e9, offwhite #e6edf7, teal #2dd4bf. Shob rong bodlate find and replace use koro. Emerald look: #38bdf8 to #34d399 ar #0ea5e9 to #10b981. Favicon 16px e line ghenshe thakle stroke-width 3 ke 3.5 koro. Browser favicon cache kore, tai Ctrl+Shift+R diye dekho. index.html e thakbe: link rel="icon" href="favicon.svg" type="image/svg+xml". Folder e rakhle href e folder er naam likho. -->
 </svg>
-
-<!-- ==========================================================================
-     GUIDE AND SUGGESTIONS (comments only: nothing here changes the icon)
-     ==========================================================================
-
-     A. KIBHABE SAVE KORBE
-        1. GitHub repository -> Add file -> Create new file
-        2. File name: favicon.svg (repository root, index.html er pashe)
-        3. Uporer SVG code (<svg> theke </svg> porjonto) paste koro. Ei guide comment
-           rakhte paro ba delete korte paro, duitai thik.
-        4. Commit changes.
-
-     B. INDEX.HTML E REFERENCE
-        Tomar index.html e age thekei ei line ache:
-        <link rel="icon" href="favicon.svg" type="image/svg+xml">
-        Eita root e rakha favicon.svg er sathe mile jay. Folder e rakhle (jemon assets/)
-        href="assets/favicon.svg" likhte hobe. File er naam o hubohu same hote hobe.
-
-     C. RONG BODLANOR JONNO (EDIT HERE)
-        Background navy ......... #0b1220  (style.css er --color-bg er same)
-        Main cyan (bar, ujjol) .. #38bdf8
-        Mid blue (chhoto bar) ... #0ea5e9
-        Line ar dot (offwhite) .. #e6edf7
-        Last dot (teal) ......... #2dd4bf
-        Shob rong ekshathe bodlate chaile text editor er find-replace use koro.
-        Emerald look: #38bdf8 -> #34d399, #0ea5e9 -> #10b981.
-
-     D. SHAPE BODLANOR JONNO
-        Corner roundness ........ prothom <rect> er rx="14" (0 = square, 32 = circle)
-        Bar uchota .............. y ar height. Bar er nichu shobshomoy y + height = 52 rakho.
-        Line er point ............ polyline points, ar dot er cx/cy ke same rakho.
-
-     E. TEST ar CACHE
-        - Browser favicon onek din cache kore. Update dile Ctrl+Shift+R (hard refresh)
-          ba incognito tab e dekho.
-        - Live site e 16px, 32px tab size e dekho. Jodi line ghenshe thake, line er
-          stroke-width="3" ke "3.5" koro.
-        - GitHub Pages deploy hote 1-2 minute lagte pare.
-
-     F. SUGGESTION (optional, porer step e)
-        - Kichu purono browser/iOS SVG favicon support kore na. Pore chaile favicon.ico
-          ba apple-touch-icon.png alada file hishebe add korte parbe. Ekhon dorkar nei.
-        - Ei icon ta portfolio er brand mark (nav e "YN" box) er shathe ekoi rong use kore,
-          tai site er design er sathe mile thakbe.
-     ========================================================================== -->
