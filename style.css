@@ -2658,3 +2658,129 @@ iframe {
       lighter values for the --color-* variables.
 
    ========================================================================== */
+/* ==========================================================================
+   24. NAVIGATION FIX — matches index.html (.site-header, .primary-nav, .nav-list, .nav-link)
+   Needed because section 5 of this file styles .nav-links, but the HTML uses .nav-list.
+   ========================================================================== */
+.site-header {
+  background: rgba(11, 18, 32, 0.92);
+  border-bottom: 1px solid var(--color-border);
+}
+
+@supports ((backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))) {
+  .site-header {
+    background: rgba(11, 18, 32, 0.78);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  min-height: var(--nav-height);
+}
+
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: var(--text-sm);
+  font-weight: 750;
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  border-radius: var(--radius-md);
+}
+
+.brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+.brand-role { font-size: var(--text-xs); font-weight: 500; color: var(--color-text-soft); }
+
+.primary-nav { display: flex; align-items: center; gap: var(--space-3); }
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.5rem 0.45rem;
+  font-size: 0.875rem;
+  font-weight: 550;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--color-text);
+  background: rgba(148, 163, 184, 0.1);
+}
+
+/* Current section (set by script.js) */
+.nav-link.active,
+.nav-link[aria-current] {
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+  box-shadow: inset 0 -2px 0 var(--color-accent);
+}
+
+/* Small laptops: hide the small role text so the menu fits on one line */
+@media (min-width: 1181px) and (max-width: 1320px) {
+  .brand-role { display: none; }
+}
+
+/* Mobile menu: closed by default, opened when script.js adds .active */
+@media (max-width: 1180px) {
+  .primary-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    max-height: calc(100vh - var(--nav-height));
+    max-height: calc(100dvh - var(--nav-height));
+    padding: var(--space-3) var(--gutter) var(--space-5);
+    overflow-y: auto;
+    background: var(--color-bg-deep);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .primary-nav.active { display: flex; }
+
+  .nav-list { flex-direction: column; align-items: stretch; gap: var(--space-1); }
+  .nav-link { padding: 0.85rem 1rem; font-size: var(--text-base); white-space: normal; }
+  .nav-resume { align-self: flex-start; margin-top: var(--space-2); }
+}
+
+/* No JavaScript: show the links as a wrapped row instead of a dead hamburger */
+@media (max-width: 1180px) and (scripting: none) {
+  .nav-toggle { display: none; }
+  .header-inner { flex-wrap: wrap; padding-block: var(--space-2); }
+  .primary-nav {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: none;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+  .nav-list { flex-direction: row; flex-wrap: wrap; }
+}
+
