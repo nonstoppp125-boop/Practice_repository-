@@ -1,21 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-labelledby="t d">
-  <title id="t">Data Analyst Portfolio</title>
-  <desc id="d">Three rising cyan bars with a connected trend line and data points on a dark navy rounded square.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Background tile. Change the fill colour to alter the base shade. -->
+  <rect width="64" height="64" rx="14" fill="#070d1a"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#22d3ee" stroke-opacity="0.35" stroke-width="1.5"/>
 
-  <!-- Background (EDIT HERE: rx="14" bodlale kona round hobe, 0 = square, 32 = circle) -->
-  <rect width="64" height="64" rx="14" fill="#0b1220"/>
-  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#38bdf8" stroke-opacity=".28" stroke-width="1.5"/>
+  <!-- Three faces of an isometric cube. Top, left and right fills are the shading colours. -->
+  <path d="M32 10 L50 20 L32 31 L14 20 Z" fill="#0e4a5c"/>
+  <path d="M14 20 L32 31 L32 52 L14 42 Z" fill="#0b2540"/>
+  <path d="M50 20 L32 31 L32 52 L50 42 Z" fill="#2a1f6b"/>
 
-  <!-- Data bars (EDIT HERE: bar er nichu shobshomoy y + height = 52 rakho) -->
-  <rect x="11" y="40" width="10" height="12" rx="2" fill="#0ea5e9" fill-opacity=".5"/>
-  <rect x="27" y="32" width="10" height="20" rx="2" fill="#0ea5e9" fill-opacity=".8"/>
-  <rect x="43" y="22" width="10" height="30" rx="2" fill="#38bdf8"/>
+  <!-- Cube outline and inner edges. Change the stroke colour for a different neon accent. -->
+  <path d="M32 10 L50 20 L50 42 L32 52 L14 42 L14 20 Z" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M14 20 L32 31 L50 20 M32 31 L32 52" fill="none" stroke="#22d3ee" stroke-opacity="0.6" stroke-width="2" stroke-linejoin="round"/>
 
-  <!-- Trend line and data points (EDIT HERE: polyline points ar circle cx/cy same rakho) -->
-  <polyline points="16,31 32,23 48,13" fill="none" stroke="#e6edf7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="16" cy="31" r="3.6" fill="#e6edf7" stroke="#0b1220" stroke-width="1.5"/>
-  <circle cx="32" cy="23" r="3.6" fill="#e6edf7" stroke="#0b1220" stroke-width="1.5"/>
-  <circle cx="48" cy="13" r="3.6" fill="#2dd4bf" stroke="#0b1220" stroke-width="1.5"/>
-
-  <!-- GUIDE: Rong: navy #0b1220, cyan #38bdf8, blue #0ea5e9, offwhite #e6edf7, teal #2dd4bf. Shob rong bodlate find and replace use koro. Emerald look: #38bdf8 to #34d399 ar #0ea5e9 to #10b981. Favicon 16px e line ghenshe thakle stroke-width 3 ke 3.5 koro. Browser favicon cache kore, tai Ctrl+Shift+R diye dekho. index.html e thakbe: link rel="icon" href="favicon.svg" type="image/svg+xml". Folder e rakhle href e folder er naam likho. -->
+  <!-- Rising chart line with arrow head. Edit the points to change the trend shape. -->
+  <path d="M21 41 L29 33 L35 38 L46 24" fill="none" stroke="#e0f7ff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M39 24 L46 24 L46 31" fill="none" stroke="#e0f7ff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
