@@ -1,934 +1,660 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- ============================================================
-       HEAD: browser tab, Google, ar WhatsApp/LinkedIn preview er tothyo
-       ============================================================ -->
-  <meta charset="UTF-8">
+  <!--
+    ==========================================================
+    HOW TO CUSTOMISE THIS FILE (READ FIRST)
+    ==========================================================
+    This is index.html, the content of your portfolio.
+    It works together with style.css (looks) and script.js (behaviour).
+
+    HOW TO FIND PLACEHOLDERS:
+    Use the search feature in GitHub's editor and look for these words.
+    Replace every one before you share the site publicly.
+      YOUR_NAME
+      YOUR_EMAIL
+      YOUR_GITHUB_URL
+      YOUR_LINKEDIN_URL
+      YOUR_PROJECT_TITLE
+      YOUR_INSTITUTION
+      YOUR_START_YEAR
+      YOUR_EXPECTED_YEAR
+
+    SAFE TO EDIT: any visible text, and any comment like this one.
+    DO NOT CHANGE without updating style.css and script.js too:
+      every id="..." value, every data-... attribute, and class
+      names that start with "scene-" or "js-".
+
+    COMMENT RULE: never type two hyphens followed by a greater-than
+    sign inside a comment. That ends the comment early and the rest
+    of your note would show on the live page.
+    ==========================================================
+  -->
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- EDIT HERE: YOUR_NAME er jaygay tomar asol naam likho. Eita browser tab e dekhabe. -->
-  <title>YOUR_NAME | Aspiring Data Analyst Portfolio</title>
+  <!-- Title and description: shown in browser tabs and search results. Replace YOUR_NAME. -->
+  <title>YOUR_NAME | Aspiring Data Analyst Learning Portfolio</title>
+  <meta name="description" content="Learning and project portfolio of YOUR_NAME, an aspiring Data Analyst. Projects, skills and case studies are added as they are genuinely completed.">
+  <meta name="theme-color" content="#05080f">
+  <meta name="color-scheme" content="dark">
 
-  <!-- EDIT HERE: content="..." er vitor tomar naam bosao (YOUR_NAME). Baki likha chaile bodlate paro. Eita Google search e dekhabe. -->
-  <meta name="description" content="Portfolio of YOUR_NAME, an aspiring Data Analyst building practical skills in Excel, SQL, Python, and Power BI through hands-on projects.">
-
-  <!-- EDIT HERE: content="..." e tomar naam likho -->
-  <meta name="author" content="YOUR_NAME">
-  <meta name="theme-color" content="#0f172a">
-
-  <!-- OPTIONAL: Tomar live site er link jana thakle ei line ta chalu koro.
-       Kibhabe: niche er line theke "<link" er age ja ache sob thik rekhe, sudhu
-       ei comment er shuru ar shesh er marker muche dao ebong YOUR_USERNAME ar YOUR_REPOSITORY bodlao.
-  TEMPLATE START
-  <link rel="canonical" href="https://YOUR_USERNAME.github.io/YOUR_REPOSITORY/">
-  TEMPLATE END -->
-
-  <!-- Open Graph: link share korle jei preview dekhabe -->
-  <meta property="og:type" content="website">
-  <!-- EDIT HERE: content="..." e YOUR_NAME bosao -->
-  <meta property="og:title" content="YOUR_NAME | Aspiring Data Analyst Portfolio">
-  <!-- EDIT HERE: content="..." e YOUR_NAME bosao -->
-  <meta property="og:description" content="Practical data analysis projects, skills, and learning progress of YOUR_NAME.">
-  <!-- OPTIONAL: Live link ar preview image thakle oi line duita chalu koro (marker muche, YOUR_ gulo bodlao):
-  TEMPLATE START
-  <meta property="og:url" content="https://YOUR_USERNAME.github.io/YOUR_REPOSITORY/">
-  <meta property="og:image" content="https://YOUR_USERNAME.github.io/YOUR_REPOSITORY/assets/og-image.png">
-  TEMPLATE END -->
-
-  <!-- EDIT HERE (jodi lage): Tomar favicon file er naam favicon.svg na hole href="..." er naam bodlao.
-       Favicon na thakle kono somossha nei, shudhu browser tab e chhoto icon dekhabe na. -->
+  <!-- Favicon: favicon.svg is in the repository root. -->
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
-  <!-- Design file. Eita style.css file theke ashe. Eita bodlio na. -->
+  <!-- Stylesheet: style.css must stay in the same folder as this file. -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- JavaScript: defer means it runs after the page is read. -->
+  <script src="script.js" defer></script>
 </head>
 
-<body id="top">
+<body class="no-js">
+  <!--
+    The body starts with the class no-js. script.js should replace it
+    with js-ready when it starts. style.css can use this to show or hide
+    the fallback content for visitors without JavaScript.
+  -->
 
+  <!-- Skip link: lets keyboard users jump past the menu. Keep it as the first element. -->
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
-  <!-- ============================================================
-       START: HEADER AND NAVIGATION (uporer menu)
-       ============================================================ -->
-  <header class="site-header" id="site-header">
-    <div class="container header-inner">
+  <!--
+    Decorative background layers. aria-hidden hides them from screen readers.
+    style.css draws the grid and glow. script.js may draw particles into the canvas mount.
+  -->
+  <div class="bg-layers" id="bg-layers" aria-hidden="true">
+    <div class="bg-layer bg-grid"></div>
+    <div class="bg-layer bg-glow"></div>
+    <div class="bg-layer bg-particles" id="bg-particles"></div>
+  </div>
 
-      <!-- EDIT HERE: aria-label="..." e YOUR_NAME likho.
-           "YN" hocche tomar naam er pratham dui okkhor (initials). Jemon Rahim Khan hole "RK".
-           Brand name e YOUR_NAME bodlao.
-           "Aspiring Data Analyst" thik thakle bodlano dorkar nei. -->
-      <a class="brand" href="#home" aria-label="YOUR_NAME - go to home section">
-        <span class="brand-mark" aria-hidden="true">YN</span>
-        <span class="brand-text">
-          <span class="brand-name">YOUR_NAME</span>
-          <span class="brand-role">Aspiring Data Analyst</span>
-        </span>
+  <!-- HEADER AND NAVIGATION. The ids site-header, nav-toggle and site-nav are used by script.js. -->
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="#home" aria-label="YOUR_NAME, back to the top of the page">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__text">YOUR_NAME</span>
       </a>
 
-      <!-- Mobile menu button. Eita bodlio na. script.js eita chalabe. -->
+      <!-- Mobile menu button. script.js toggles aria-expanded and the open state on site-nav. -->
       <button class="nav-toggle" id="nav-toggle" type="button"
-              aria-expanded="false" aria-controls="primary-nav"
-              aria-label="Toggle navigation menu">
-        <span class="nav-toggle-bar" aria-hidden="true"></span>
-        <span class="nav-toggle-bar" aria-hidden="true"></span>
-        <span class="nav-toggle-bar" aria-hidden="true"></span>
+              aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle__label">Menu</span>
+        <span class="nav-toggle__bars" aria-hidden="true"></span>
       </button>
 
-      <!-- Menu links. href="#..." gulo section er id er shathe mile ache, tai bodlio na.
-           Kono menu item muchte chaile oi puro <li> line ta delete koro. -->
-      <nav class="primary-nav" id="primary-nav" aria-label="Primary">
-        <ul class="nav-list">
-          <li><a class="nav-link" href="#home">Home</a></li>
-          <li><a class="nav-link" href="#about">About</a></li>
-          <li><a class="nav-link" href="#skills">Skills</a></li>
-          <li><a class="nav-link" href="#projects">Projects</a></li>
-          <li><a class="nav-link" href="#case-studies">Case Studies</a></li>
-          <li><a class="nav-link" href="#experience">Experience</a></li>
-          <li><a class="nav-link" href="#education">Education</a></li>
-          <li><a class="nav-link" href="#certifications">Certifications</a></li>
-          <li><a class="nav-link" href="#achievements">Achievements</a></li>
-          <li><a class="nav-link" href="#contact">Contact</a></li>
+      <!--
+        Main navigation. Every href must match a section id further down.
+        To remove a section, delete both its link here and the section itself.
+        data-nav-link lets script.js highlight the current section.
+      -->
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" data-nav-link href="#home">Home</a></li>
+          <li><a class="site-nav__link" data-nav-link href="#about">About</a></li>
+          <li><a class="site-nav__link" data-nav-link href="#skills">Skills</a></li>
+          <li><a class="site-nav__link" data-nav-link href="#projects">Projects</a></li>
+          <li><a class="site-nav__link" data-nav-link href="#case-studies">Case Studies</a></li>
+          <li><a class="site-nav__link" data-nav-link href="#journey">Learning Journey</a></li>
+          <li><a class="site-nav__link" data-nav-link href="#education">Education</a></li>
+          <li><a class="site-nav__link" data-nav-link href="#certifications">Certifications</a></li>
+          <li><a class="site-nav__link" data-nav-link href="#achievements">Achievements</a></li>
+          <li><a class="site-nav__link" data-nav-link href="#contact">Contact</a></li>
         </ul>
-        <!-- EDIT HERE: Resume PDF repository te "assets" folder e upload koro ebong naam resume.pdf dao.
-             Onno naam hole href="assets/resume.pdf" e oi naam likho.
-             Resume na thakle ei puro line ta delete koro (hero er Download Resume button o delete koro). -->
-        <a class="btn btn-outline nav-resume" href="assets/resume.pdf" download>Resume</a>
       </nav>
-
     </div>
   </header>
-  <!-- END: HEADER AND NAVIGATION -->
 
-  <main id="main-content">
+  <main id="main-content" tabindex="-1">
 
-    <!-- ============================================================
-         START: HERO (prothom screen)
-         ============================================================ -->
-    <section class="section hero" id="home" aria-labelledby="hero-heading">
-      <div class="container hero-inner">
+    <!--
+      HERO SECTION (id="home").
+      Left side: real text. Right side: the 3D scene area.
+      The only h1 on the page is in here. Replace YOUR_NAME.
+    -->
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero__content" data-reveal>
+        <p class="hero__eyebrow">Interactive learning portfolio</p>
+        <h1 class="hero__title" id="hero-title">
+          Hi, I am <span class="hero__name">YOUR_NAME</span>,
+          an aspiring Data Analyst.
+        </h1>
+        <p class="hero__lead">
+          I am learning to turn raw data into clear questions, honest findings and
+          useful recommendations. This portfolio shows my projects and progress as they
+          grow, including work that is still in progress.
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="#projects">View projects</a>
+          <a class="button button--secondary" href="#contact">Get in touch</a>
+        </div>
+        <p class="hero__hint">
+          <span class="hero__hint-dot" aria-hidden="true"></span>
+          Try the interactive 3D desk. Pull the cord to switch on the light.
+        </p>
+        <a class="hero__scroll" href="#about">
+          <span class="hero__scroll-text">Scroll to explore</span>
+          <span class="hero__scroll-arrow" aria-hidden="true"></span>
+        </a>
+      </div>
 
-        <div class="hero-content">
-          <!-- EDIT HERE: Tomar current obostha likho. Jemon "Career stage: HSC student learning Data Analytics". -->
-          <p class="eyebrow" id="hero-stage">Career stage: Learning Data Analytics (beginner)</p>
+      <!--
+        3D SCENE AREA. NECESSARY for the 3D experience.
+        Do not rename scene-container, scene-mount, scene-status,
+        scene-fallback, scene-description or any control id.
 
-          <!-- EDIT HERE: YOUR_NAME er jaygay tomar pura naam likho -->
-          <h1 id="hero-heading" class="hero-name">YOUR_NAME</h1>
+        data-three-url: a pinned Three.js module address. script.js loads it
+        only when the browser supports WebGL, then builds the desk, monitor,
+        floating cards and cord in code. No 3D model files are needed.
+        Pinning a version keeps the scene from changing without warning.
+      -->
+      <div class="scene" id="scene-container"
+           data-three-url="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+           data-scene-state="loading">
 
-          <!-- EDIT HERE (optional): Title. "Aspiring Data Analyst" i beginner er jonno thik ache. -->
-          <p class="hero-title">Aspiring Data Analyst</p>
+        <!-- script.js puts the 3D canvas inside this empty div. -->
+        <div class="scene__mount" id="scene-mount" role="img"
+             aria-label="Interactive 3D desk with a monitor showing charts, floating data cards and a hanging light cord. Equivalent buttons are listed below the scene."></div>
 
-          <!-- EDIT HERE: Nijer jonno 2-3 line er introduction likho. Shudhu je kotha sotti ta likho. -->
-          <p class="hero-intro">
-            I am learning data analytics and building practical projects with Excel, SQL, Python, and Power BI.
-            I enjoy turning raw data into clear answers to real questions. This portfolio shows my work as it grows,
-            including projects that are still in progress.
+        <!--
+          Status message. role=status makes screen readers announce changes.
+          script.js changes the text: loading, ready, or the reason it failed.
+        -->
+        <p class="scene__status" id="scene-status" role="status" aria-live="polite">
+          Preparing the 3D scene...
+        </p>
+
+        <!--
+          Fallback panel. Visible by default. script.js hides it once the scene
+          works. style.css can also hide it when the body has the js-ready class.
+        -->
+        <div class="scene__fallback" id="scene-fallback">
+          <p class="scene__fallback-title">3D scene not available</p>
+          <p class="scene__fallback-text">
+            Your browser cannot show the 3D scene, or JavaScript is switched off.
+            Everything on this page still works. Use the menu to read all sections.
           </p>
-
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#projects">View Projects</a>
-            <a class="btn btn-secondary" href="#contact">Contact Me</a>
-            <!-- EDIT HERE: Resume na thakle ei line ta delete koro. -->
-            <a class="btn btn-outline" href="assets/resume.pdf" download>Download Resume</a>
-          </div>
-
-          <!-- EDIT HERE: YOUR_GITHUB_URL er jaygay tomar GitHub profile link (jemon https://github.com/tomar-username).
-               YOUR_LINKEDIN_URL er jaygay LinkedIn profile link. LinkedIn na thakle oi <li> ta delete koro. -->
-          <ul class="social-links" aria-label="Professional profiles">
-            <li><a class="social-link" href="YOUR_GITHUB_URL" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-            <li><a class="social-link" href="YOUR_LINKEDIN_URL" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-          </ul>
         </div>
 
-        <!-- EDIT HERE: Ekhon naam er initials dekhabe.
-             1) aria-label e YOUR_NAME likho.
-             2) "YN" er jaygay tomar initials likho.
-             Nijer chobi dite chaile (chobi assets folder e upload koro, jemon profile.jpg):
-             purono <div class="avatar"> ... </div> ta muche niche er line ta bosao
-             (marker duita bad dao):
-             TEMPLATE START
-             <img class="avatar-image" src="assets/profile.jpg" alt="Photo of YOUR_NAME" width="320" height="320">
-             TEMPLATE END -->
-        <div class="hero-visual">
-          <div class="avatar" role="img" aria-label="Initials avatar for YOUR_NAME">
-            <span class="avatar-initials" aria-hidden="true">YN</span>
-          </div>
-        </div>
+        <noscript>
+          <p class="scene__noscript">
+            JavaScript is turned off, so the interactive 3D scene is hidden.
+            All portfolio content below remains available.
+          </p>
+        </noscript>
+      </div>
 
+      <!--
+        SCENE CONTROLS. A real-HTML version of every 3D interaction.
+        Anyone can use these buttons with a mouse, finger or keyboard.
+        script.js connects them. Controls are hidden until the scene is ready
+        only if style.css chooses to do so. They work without hovering.
+      -->
+      <div class="scene-controls" id="scene-controls" role="group" aria-label="3D scene controls">
+        <p class="scene-controls__instructions" id="scene-instructions">
+          Click or tap objects in the scene, or use these buttons.
+        </p>
+
+        <!-- Light switch. Same effect as pulling the cord in 3D. script.js keeps aria-pressed updated. -->
+        <button class="button button--glow" id="light-toggle" type="button"
+                aria-pressed="false" data-scene-action="toggle-light">
+          <span class="button__label">Pull the cord: light is off</span>
+        </button>
+
+        <button class="button button--secondary" id="scene-reset" type="button"
+                data-scene-action="reset-view">
+          Re-centre view
+        </button>
+
+        <!--
+          Object list. data-scene-object must match the object names that script.js
+          creates in 3D. data-target is the section that object leads to.
+          Remove a list item only if you also remove that object in script.js.
+        -->
+        <ul class="scene-objects" id="scene-object-list" aria-label="Objects in the scene">
+          <li>
+            <button class="scene-objects__button" type="button"
+                    data-scene-object="monitor" data-target="#projects">
+              Monitor: projects
+            </button>
+          </li>
+          <li>
+            <button class="scene-objects__button" type="button"
+                    data-scene-object="data-cards" data-target="#skills">
+              Floating data cards: skills
+            </button>
+          </li>
+          <li>
+            <button class="scene-objects__button" type="button"
+                    data-scene-object="notebook" data-target="#case-studies">
+              Notebook: case studies
+            </button>
+          </li>
+          <li>
+            <button class="scene-objects__button" type="button"
+                    data-scene-object="chart-cube" data-target="#about">
+              Chart cube: about this portfolio
+            </button>
+          </li>
+        </ul>
+
+        <!--
+          Description area. script.js writes what the selected object means.
+          role=status with aria-live announces the text to screen readers.
+        -->
+        <div class="scene-description" id="scene-description" role="status" aria-live="polite">
+          <p class="scene-description__text">
+            Select an object to learn what it represents.
+          </p>
+          <!-- script.js can reveal this link to open the matching section. -->
+          <a class="scene-description__link" id="scene-description-link" href="#projects" hidden>
+            Go to section
+          </a>
+        </div>
       </div>
     </section>
-    <!-- END: HERO -->
 
-
-    <!-- ============================================================
-         START: ABOUT (amar somporke)
-         ============================================================ -->
-    <section class="section" id="about" aria-labelledby="about-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="eyebrow">About</p>
-          <h2 id="about-heading">About Me</h2>
+    <!--
+      ABOUT SECTION (id="about").
+      Replace every placeholder sentence with your own words.
+      Do not write a biography you cannot back up.
+    -->
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="section__inner">
+        <header class="section__header" data-reveal>
+          <p class="section__eyebrow">About</p>
+          <h2 class="section__title" id="about-title">About this portfolio</h2>
         </header>
 
         <div class="about-grid">
-          <!-- EDIT HERE (5 ta block): Protita [ ... ] er vitorer likha muche nijer kotha likho.
-               [ ] bracket o muche dio. Shudhu sotti kotha likho, baniye likhio na. -->
-          <article class="card about-block">
-            <h3>Current learning journey</h3>
-            <!-- EDIT HERE: Ekhon ki shikhcho, kothay shikhcho -->
-            <p>[Describe what you are learning now, for example: "I am studying data analytics alongside my HSC, focusing on spreadsheets, SQL, and Python." Edit to match your real situation.]</p>
+          <article class="card" data-reveal>
+            <h3 class="card__title">Introduction</h3>
+            <p class="card__text">
+              PLACEHOLDER: Write two or three honest sentences about who you are and why you
+              are learning data analytics. Replace this text before publishing.
+            </p>
           </article>
-
-          <article class="card about-block">
-            <h3>Interest in data and business problems</h3>
-            <!-- EDIT HERE: Data analysis keno bhalo lage -->
-            <p>[Explain why data analysis interests you and what kinds of business questions you enjoy exploring.]</p>
+          <article class="card" data-reveal>
+            <h3 class="card__title">Learning goals</h3>
+            <p class="card__text">
+              PLACEHOLDER: What do you want to be able to do in the next 6 to 12 months?
+            </p>
           </article>
-
-          <article class="card about-block">
-            <h3>Career goals</h3>
-            <!-- EDIT HERE: Tomar career lokkho (junior analyst, internship, freelance) -->
-            <p>[Describe the role you are working toward, such as an entry-level or junior Data Analyst position, internship, or freelance work.]</p>
+          <article class="card" data-reveal>
+            <h3 class="card__title">Analytical interests</h3>
+            <p class="card__text">
+              PLACEHOLDER: Which kinds of questions or data interest you most?
+            </p>
           </article>
-
-          <article class="card about-block">
-            <h3>Analytical approach</h3>
-            <!-- EDIT HERE: Tumi kibhabe kaj koro -->
-            <p>[Describe how you work: asking clear questions first, checking data quality, validating results, and explaining findings simply.]</p>
+          <article class="card" data-reveal>
+            <h3 class="card__title">How I approach problems</h3>
+            <p class="card__text">
+              PLACEHOLDER: Describe the steps you try to follow, such as asking a clear
+              question, checking data quality, exploring, and explaining results.
+            </p>
           </article>
-
-          <article class="card about-block about-block-wide">
-            <h3>Commitment to practical projects and improvement</h3>
-            <!-- EDIT HERE: Tumi kibhabe practice koro -->
-            <p>[Describe how you practice: building projects, reviewing mistakes, and updating this portfolio as your skills develop.]</p>
+          <article class="card" data-reveal>
+            <h3 class="card__title">Current learning status</h3>
+            <p class="card__text">
+              PLACEHOLDER: Say what you are studying right now. Keep it truthful and up to date.
+            </p>
           </article>
         </div>
       </div>
     </section>
-    <!-- END: ABOUT -->
 
-
-    <!-- ============================================================
-         START: SKILLS (dokkhota)
-         KIBHABE EDIT KORBE:
-         - Notun skill: je kono ekta <li class="skill-item"> ... </li> copy kore ekoi list e paste koro, naam bodlao.
-         - Skill muchte: oi <li> ... </li> puro delete koro.
-         - "Learning" likha ta tomar sotti obostha onujayi bodlao (jemon Practicing, Comfortable).
-         - Kono percentage dio na.
-         ============================================================ -->
-    <section class="section section-alt" id="skills" aria-labelledby="skills-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="eyebrow">Skills</p>
-          <h2 id="skills-heading">Skills and Tools</h2>
-          <p class="section-intro">The tools and abilities I am actively developing. Labels show my honest current stage, not mastery.</p>
+    <!--
+      SKILLS SECTION (id="skills").
+      These are topics I am learning, NOT proof of mastery.
+      Levels are plain words, not percentages. Allowed labels: Learning, Practicing, Project-ready.
+      The data-level value should match the visible label in lowercase so style.css can style it.
+      Change a label only if it is true. HOW TO ADD A SKILL: copy one li item inside a group
+      and edit its name and level. HOW TO REMOVE: delete the whole li item.
+    -->
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <div class="section__inner">
+        <header class="section__header" data-reveal>
+          <p class="section__eyebrow">Skills and tools</p>
+          <h2 class="section__title" id="skills-title">What I am learning</h2>
+          <p class="section__intro">
+            These labels describe my current stage honestly. They are not measured scores.
+          </p>
         </header>
 
         <div class="skills-grid">
-
-          <article class="card skill-category" id="skills-spreadsheets-databases">
-            <h3>Spreadsheets and Databases</h3>
+          <article class="skill-group card" data-reveal>
+            <h3 class="card__title">Data tools</h3>
             <ul class="skill-list">
-              <!-- EDIT HERE: skill-name = skill er naam, skill-status = tomar stage. data-status o same stage er sathe mil rakho (learning/practicing/comfortable). -->
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Excel</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">Excel and spreadsheets</span>
+                <span class="skill-list__level">Learning</span>
               </li>
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">SQL</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">SQL</span>
+                <span class="skill-list__level">Learning</span>
+              </li>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">Power BI</span>
+                <span class="skill-list__level">Learning</span>
               </li>
             </ul>
           </article>
 
-          <article class="card skill-category" id="skills-programming">
-            <h3>Programming and Libraries</h3>
+          <article class="skill-group card" data-reveal>
+            <h3 class="card__title">Python for analysis</h3>
             <ul class="skill-list">
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Python</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">Python</span>
+                <span class="skill-list__level">Learning</span>
               </li>
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Pandas</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">pandas and NumPy</span>
+                <span class="skill-list__level">Learning</span>
               </li>
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">NumPy</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">Matplotlib and Seaborn</span>
+                <span class="skill-list__level">Learning</span>
               </li>
             </ul>
           </article>
 
-          <article class="card skill-category" id="skills-visualization">
-            <h3>Data Visualization</h3>
+          <article class="skill-group card" data-reveal>
+            <h3 class="card__title">Analysis methods</h3>
             <ul class="skill-list">
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Data visualization principles</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">Statistics</span>
+                <span class="skill-list__level">Learning</span>
               </li>
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Matplotlib and Seaborn</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">Data cleaning</span>
+                <span class="skill-list__level">Learning</span>
               </li>
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Power BI</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">Exploratory Data Analysis (EDA)</span>
+                <span class="skill-list__level">Learning</span>
               </li>
             </ul>
           </article>
 
-          <article class="card skill-category" id="skills-analysis">
-            <h3>Analysis Foundations</h3>
+          <article class="skill-group card" data-reveal>
+            <h3 class="card__title">Communication and thinking</h3>
             <ul class="skill-list">
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Statistics</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">Data visualization</span>
+                <span class="skill-list__level">Learning</span>
               </li>
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Data cleaning</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">Business problem-solving</span>
+                <span class="skill-list__level">Learning</span>
               </li>
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Exploratory Data Analysis (EDA)</span>
-                <span class="skill-status">Learning</span>
+              <li class="skill-list__item" data-level="learning">
+                <span class="skill-list__name">AI-assisted analytics</span>
+                <span class="skill-list__level">Learning</span>
               </li>
             </ul>
           </article>
+        </div>
+      </div>
+    </section>
 
-          <article class="card skill-category" id="skills-professional">
-            <h3>Professional Skills</h3>
-            <ul class="skill-list">
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Business understanding</span>
-                <span class="skill-status">Learning</span>
-              </li>
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Problem-solving</span>
-                <span class="skill-status">Learning</span>
-              </li>
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">Communication</span>
-                <span class="skill-status">Learning</span>
-              </li>
-            </ul>
+    <!--
+      PROJECTS SECTION (id="projects").
+      The three cards below are EXAMPLE PLACEHOLDERS, not finished work.
+      HOW TO ADD A PROJECT: copy one whole article with class project-card,
+      paste it after the last one, and edit the text.
+      Statuses to use: Planned, In progress, Completed. Use Completed only when true.
+      LINKS: when you have a real repository or demo, replace the span with
+      an a tag that has the real address, target _blank and rel="noopener noreferrer".
+      Delete any link row you do not have.
+    -->
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <div class="section__inner">
+        <header class="section__header" data-reveal>
+          <p class="section__eyebrow">Projects</p>
+          <h2 class="section__title" id="projects-title">Projects</h2>
+          <p class="section__intro">
+            No completed projects are shown yet. The cards below are templates that will be
+            filled in with real work and real findings.
+          </p>
+        </header>
+
+        <div class="projects-grid">
+
+          <article class="project-card card" data-reveal>
+            <header class="project-card__header">
+              <h3 class="project-card__title">YOUR_PROJECT_TITLE (project 1)</h3>
+              <p class="status-badge" data-status="placeholder">Status: Template, not a real project</p>
+            </header>
+            <dl class="project-card__details">
+              <div class="detail"><dt>Problem</dt><dd>PLACEHOLDER: the question this project answers.</dd></div>
+              <div class="detail"><dt>Dataset source</dt><dd>PLACEHOLDER: where the data comes from.</dd></div>
+              <div class="detail"><dt>Tools</dt><dd>PLACEHOLDER: for example Excel or SQL.</dd></div>
+              <div class="detail"><dt>Method</dt><dd>PLACEHOLDER: cleaning, exploring, analysing.</dd></div>
+              <div class="detail"><dt>Key findings</dt><dd>Not available yet.</dd></div>
+              <div class="detail"><dt>Recommendation</dt><dd>Not available yet.</dd></div>
+            </dl>
+            <p class="project-card__links">
+              <span class="link-placeholder">Repository link: add when available</span>
+            </p>
           </article>
 
-          <article class="card skill-category" id="skills-ai">
-            <h3>AI-Assisted Analytics</h3>
-            <ul class="skill-list">
-              <li class="skill-item" data-status="learning">
-                <span class="skill-name">AI-assisted analytics and responsible AI use</span>
-                <span class="skill-status">Learning</span>
-              </li>
-            </ul>
-            <!-- EDIT HERE (optional): AI niye tomar nijer kotha likho, ba line ta delete koro. -->
-            <p class="skill-note">I use AI tools to learn and speed up routine work, and I always check results myself.</p>
+          <article class="project-card card" data-reveal>
+            <header class="project-card__header">
+              <h3 class="project-card__title">YOUR_PROJECT_TITLE (project 2)</h3>
+              <p class="status-badge" data-status="placeholder">Status: Template, not a real project</p>
+            </header>
+            <dl class="project-card__details">
+              <div class="detail"><dt>Problem</dt><dd>PLACEHOLDER: the question this project answers.</dd></div>
+              <div class="detail"><dt>Dataset source</dt><dd>PLACEHOLDER: where the data comes from.</dd></div>
+              <div class="detail"><dt>Tools</dt><dd>PLACEHOLDER: for example Python or Power BI.</dd></div>
+              <div class="detail"><dt>Method</dt><dd>PLACEHOLDER: cleaning, exploring, analysing.</dd></div>
+              <div class="detail"><dt>Key findings</dt><dd>Not available yet.</dd></div>
+              <div class="detail"><dt>Recommendation</dt><dd>Not available yet.</dd></div>
+            </dl>
+            <p class="project-card__links">
+              <span class="link-placeholder">Repository link: add when available</span>
+            </p>
+          </article>
+
+          <article class="project-card card" data-reveal>
+            <header class="project-card__header">
+              <h3 class="project-card__title">YOUR_PROJECT_TITLE (project 3)</h3>
+              <p class="status-badge" data-status="placeholder">Status: Template, not a real project</p>
+            </header>
+            <dl class="project-card__details">
+              <div class="detail"><dt>Problem</dt><dd>PLACEHOLDER: the question this project answers.</dd></div>
+              <div class="detail"><dt>Dataset source</dt><dd>PLACEHOLDER: where the data comes from.</dd></div>
+              <div class="detail"><dt>Tools</dt><dd>PLACEHOLDER: the tools you really use.</dd></div>
+              <div class="detail"><dt>Method</dt><dd>PLACEHOLDER: cleaning, exploring, analysing.</dd></div>
+              <div class="detail"><dt>Key findings</dt><dd>Not available yet.</dd></div>
+              <div class="detail"><dt>Recommendation</dt><dd>Not available yet.</dd></div>
+            </dl>
+            <p class="project-card__links">
+              <span class="link-placeholder">Repository link: add when available</span>
+            </p>
           </article>
 
         </div>
       </div>
     </section>
-    <!-- END: SKILLS -->
 
-
-    <!-- ============================================================
-         START: DATA ANALYTICS APPROACH (kaj korar dhap)
-         Ei section ta bodlano dorkar nei. Chaile likha nijer moto kore nite paro.
-         ============================================================ -->
-    <section class="section" id="approach" aria-labelledby="approach-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="eyebrow">Workflow</p>
-          <h2 id="approach-heading">My Data Analytics Approach</h2>
-          <p class="section-intro">The eight steps I follow on every project, from question to recommendation.</p>
+    <!--
+      CASE STUDIES SECTION (id="case-studies").
+      Keep this placeholder state until you have a real case study.
+      Then replace each line with your own writing, in the same order.
+    -->
+    <section class="section" id="case-studies" aria-labelledby="case-title">
+      <div class="section__inner">
+        <header class="section__header" data-reveal>
+          <p class="section__eyebrow">Case studies</p>
+          <h2 class="section__title" id="case-title">Case studies</h2>
+          <p class="status-badge" data-status="pending">Status: No case study published yet</p>
         </header>
 
-        <ol class="approach-steps">
-          <li class="approach-step">
-            <h3>Understand the business problem</h3>
-            <p>Learn what decision needs support and why it matters.</p>
-          </li>
-          <li class="approach-step">
-            <h3>Define questions and metrics</h3>
-            <p>Turn the problem into specific questions and measurable indicators.</p>
-          </li>
-          <li class="approach-step">
-            <h3>Collect and inspect data</h3>
-            <p>Gather the data and check its structure, size, and gaps.</p>
-          </li>
-          <li class="approach-step">
-            <h3>Clean and validate data</h3>
-            <p>Fix errors, handle missing values, and confirm the data can be trusted.</p>
-          </li>
-          <li class="approach-step">
-            <h3>Analyze patterns and relationships</h3>
-            <p>Look for trends, comparisons, and connections that answer the questions.</p>
-          </li>
-          <li class="approach-step">
-            <h3>Visualize findings</h3>
-            <p>Use clear charts and tables so results are easy to understand.</p>
-          </li>
-          <li class="approach-step">
-            <h3>Communicate insights</h3>
-            <p>Explain what was found in plain language, including limits.</p>
-          </li>
-          <li class="approach-step">
-            <h3>Recommend evidence-based actions</h3>
-            <p>Suggest next steps that are supported by the data.</p>
-          </li>
-        </ol>
-      </div>
-    </section>
-    <!-- END: DATA ANALYTICS APPROACH -->
-
-
-    <!-- ============================================================
-         START: FEATURED PROJECTS
-         KIBHABE EDIT KORBE:
-         - Notun project: ekta puro <article class="card project-card"> ... </article> block copy kore
-           shesh project er pore paste koro. Tarpor id (project-4 ityadi) unique rakho.
-         - Project muchte: oi puro <article> ... </article> delete koro.
-         - Status: data-status ar badge text (In progress / Completed / Planned) duitai bodlao.
-           Completed likhbe shudhu tokhon, jokhon project sotti sesh.
-         - Kono link na thakle oi <li> ta delete koro.
-         ============================================================ -->
-    <section class="section section-alt" id="projects" aria-labelledby="projects-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="eyebrow">Projects</p>
-          <h2 id="projects-heading">Featured Projects</h2>
-          <p class="section-intro">Hands-on analysis projects. Each card shows whether the project is completed or still in progress.</p>
-        </header>
-
-        <div class="project-grid">
-
-          <!-- START PROJECT CARD 1 -->
-          <!-- EDIT HERE: Project sesh hole data-status="completed" likho ar niche badge e "Completed" likho (class ta project-status-completed korte paro). -->
-          <article class="card project-card" id="project-1" data-status="in-progress">
-            <div class="project-thumb">
-              <!-- EDIT HERE: Project er screenshot/chart thakle assets folder e upload kore ei <div class="image-placeholder"> ... </div> muche niche er line bosao
-                   (alt e chobi te ki ache likho; marker duita bad dao):
-                   TEMPLATE START
-                   <img src="assets/project-1.png" alt="Describe the project chart or dashboard" width="640" height="360" loading="lazy">
-                   TEMPLATE END -->
-              <div class="image-placeholder" role="img" aria-label="Project 1 thumbnail placeholder">
-                <span>Thumbnail placeholder</span>
-              </div>
-            </div>
-            <div class="project-body">
-              <p class="project-meta">
-                <!-- EDIT HERE: Status ("In progress", "Completed" ba "Planned") ar Category likho. -->
-                <span class="project-status project-status-in-progress">In progress</span>
-                <span class="project-category">Category: [e.g. Excel / Sales analysis]</span>
-              </p>
-              <!-- EDIT HERE: PROJECT_1_TITLE er jaygay project er naam -->
-              <h3 class="project-title">PROJECT_1_TITLE</h3>
-
-              <!-- EDIT HERE: Niche protita [ ... ] er jaygay real tothyo likho. [ ] bracket o muche dio.
-                   Key findings ar Recommendations shudhu project sesh hole likho; ar kono fake result likhio na. -->
-              <dl class="project-details">
-                <div class="detail"><dt>Business problem</dt><dd>[One or two sentences on the question this project answers.]</dd></div>
-                <div class="detail"><dt>Dataset</dt><dd>[Source, size, and what the data contains.]</dd></div>
-                <div class="detail"><dt>Tools used</dt><dd>[e.g. Excel, SQL]</dd></div>
-                <div class="detail"><dt>Analytical methods</dt><dd>[e.g. data cleaning, pivot tables, trend analysis]</dd></div>
-                <div class="detail"><dt>Key findings</dt><dd>[Add real findings once the project is finished.]</dd></div>
-                <div class="detail"><dt>Recommendations</dt><dd>[Add real recommendations once the project is finished.]</dd></div>
-              </dl>
-
-              <!-- EDIT HERE: YOUR_PROJECT_1_REPO_URL = oi project er GitHub repository link.
-                   YOUR_PROJECT_1_DEMO_URL = live demo link (na thakle oi <li> delete koro).
-                   Case study link (#case-study-1) case study section e jabe; na thakle oi <li> delete koro. -->
-              <ul class="project-links">
-                <li><a class="btn btn-small" href="YOUR_PROJECT_1_REPO_URL" target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
-                <li><a class="btn btn-small btn-outline" href="YOUR_PROJECT_1_DEMO_URL" target="_blank" rel="noopener noreferrer">Live demo</a></li>
-                <li><a class="btn btn-small btn-outline" href="#case-study-1">Case study</a></li>
-              </ul>
-            </div>
-          </article>
-          <!-- END PROJECT CARD 1 -->
-
-          <!-- START PROJECT CARD 2 -->
-          <!-- EDIT HERE: Card 1 er moto eikhaneo sob bodlao (status, category, title, details, links, image). -->
-          <article class="card project-card" id="project-2" data-status="in-progress">
-            <div class="project-thumb">
-              <div class="image-placeholder" role="img" aria-label="Project 2 thumbnail placeholder">
-                <span>Thumbnail placeholder</span>
-              </div>
-            </div>
-            <div class="project-body">
-              <p class="project-meta">
-                <span class="project-status project-status-in-progress">In progress</span>
-                <span class="project-category">Category: [e.g. Python / Data cleaning and EDA]</span>
-              </p>
-              <h3 class="project-title">PROJECT_2_TITLE</h3>
-
-              <dl class="project-details">
-                <div class="detail"><dt>Business problem</dt><dd>[One or two sentences on the question this project answers.]</dd></div>
-                <div class="detail"><dt>Dataset</dt><dd>[Source, size, and what the data contains.]</dd></div>
-                <div class="detail"><dt>Tools used</dt><dd>[e.g. Python, Pandas, Matplotlib]</dd></div>
-                <div class="detail"><dt>Analytical methods</dt><dd>[e.g. EDA, correlation, grouping]</dd></div>
-                <div class="detail"><dt>Key findings</dt><dd>[Add real findings once the project is finished.]</dd></div>
-                <div class="detail"><dt>Recommendations</dt><dd>[Add real recommendations once the project is finished.]</dd></div>
-              </dl>
-
-              <ul class="project-links">
-                <li><a class="btn btn-small" href="YOUR_PROJECT_2_REPO_URL" target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
-                <li><a class="btn btn-small btn-outline" href="YOUR_PROJECT_2_DEMO_URL" target="_blank" rel="noopener noreferrer">Live demo</a></li>
-              </ul>
-            </div>
-          </article>
-          <!-- END PROJECT CARD 2 -->
-
-          <!-- START PROJECT CARD 3 -->
-          <!-- EDIT HERE: Eita "Planned" (ekhono shuru hoyni) project. Shuru korle status "In progress" kore dao,
-               ar "Not available yet" likha jaygay real tothyo likho. Repository toiri hole links add koro. -->
-          <article class="card project-card" id="project-3" data-status="planned">
-            <div class="project-thumb">
-              <div class="image-placeholder" role="img" aria-label="Project 3 thumbnail placeholder">
-                <span>Thumbnail placeholder</span>
-              </div>
-            </div>
-            <div class="project-body">
-              <p class="project-meta">
-                <span class="project-status project-status-planned">Planned</span>
-                <span class="project-category">Category: [e.g. Power BI / Dashboard]</span>
-              </p>
-              <h3 class="project-title">PROJECT_3_TITLE</h3>
-
-              <dl class="project-details">
-                <div class="detail"><dt>Business problem</dt><dd>[What question do you plan to answer?]</dd></div>
-                <div class="detail"><dt>Dataset</dt><dd>[Planned data source.]</dd></div>
-                <div class="detail"><dt>Tools used</dt><dd>[e.g. Power BI, SQL]</dd></div>
-                <div class="detail"><dt>Analytical methods</dt><dd>[Planned methods.]</dd></div>
-                <div class="detail"><dt>Key findings</dt><dd>Not available yet. Project has not been completed.</dd></div>
-                <div class="detail"><dt>Recommendations</dt><dd>Not available yet. Project has not been completed.</dd></div>
-              </dl>
-              <!-- Ekhon kono link nei. Repository hole Card 2 er <ul class="project-links"> block ta copy kore ekhane paste koro. -->
-            </div>
-          </article>
-          <!-- END PROJECT CARD 3 -->
-
-        </div>
-      </div>
-    </section>
-    <!-- END: FEATURED PROJECTS -->
-
-
-    <!-- ============================================================
-         START: CASE STUDIES
-         KIBHABE EDIT KORBE:
-         - Notun case study: puro <article class="card case-study"> ... </article> copy kore niche paste koro.
-           id ar aria-labelledby er id gulo unique rakho (case-study-2, cs2-context ityadi).
-         - Case study na thakle puro article delete koro ar section intro te likho "Coming soon".
-         ============================================================ -->
-    <section class="section" id="case-studies" aria-labelledby="case-studies-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="eyebrow">Case Studies</p>
-          <h2 id="case-studies-heading">Case Studies</h2>
-          <p class="section-intro">Deeper write-ups of selected analyses. Sections marked as pending will be filled in as the work is completed.</p>
-        </header>
-
-        <!-- START CASE STUDY 1 -->
-        <article class="card case-study" id="case-study-1" data-status="in-progress">
-          <header class="case-study-header">
-            <!-- EDIT HERE: Status ("In progress" ba "Completed") ar title likho. -->
-            <p class="project-status project-status-in-progress">In progress</p>
-            <h3>CASE_STUDY_1_TITLE</h3>
-            <!-- EDIT HERE: PROJECT_1_TITLE er jaygay oi project er naam likho (je project er sathe eita juro). -->
-            <p class="case-study-link-note">Related project: <a href="#project-1">PROJECT_1_TITLE</a></p>
-          </header>
-
-          <!-- EDIT HERE: Protita [ ... ] er jaygay nijer real kotha likho. "Pending" likha ongsho sesh hole real kotha diye bodlao. -->
-          <div class="case-study-grid">
-            <section class="case-study-part" aria-labelledby="cs1-context">
-              <h4 id="cs1-context">Business context</h4>
-              <p>[Describe the organization or scenario and why the analysis matters.]</p>
-            </section>
-            <section class="case-study-part" aria-labelledby="cs1-problem">
-              <h4 id="cs1-problem">Problem statement</h4>
-              <p>[State the problem in one or two clear sentences.]</p>
-            </section>
-            <section class="case-study-part" aria-labelledby="cs1-questions">
-              <h4 id="cs1-questions">Questions to investigate</h4>
-              <!-- EDIT HERE: Proti <li> te ekta proshno. Beshi lagle <li> copy koro, kom lagle delete koro. -->
-              <ul>
-                <li>[Question 1]</li>
-                <li>[Question 2]</li>
-                <li>[Question 3]</li>
-              </ul>
-            </section>
-            <section class="case-study-part" aria-labelledby="cs1-dataset">
-              <h4 id="cs1-dataset">Dataset and limitations</h4>
-              <p>[Describe the data source, time period, size, and known weaknesses.]</p>
-            </section>
-            <section class="case-study-part" aria-labelledby="cs1-cleaning">
-              <h4 id="cs1-cleaning">Data cleaning</h4>
-              <p>[List the cleaning steps you performed and why.]</p>
-            </section>
-            <section class="case-study-part" aria-labelledby="cs1-method">
-              <h4 id="cs1-method">Analysis methodology</h4>
-              <p>[Explain how you analyzed the data and which tools you used.]</p>
-            </section>
-            <section class="case-study-part" aria-labelledby="cs1-findings">
-              <h4 id="cs1-findings">Findings</h4>
-              <p>Pending. Findings will be added when the analysis is complete.</p>
-            </section>
-            <section class="case-study-part" aria-labelledby="cs1-recs">
-              <h4 id="cs1-recs">Recommendations</h4>
-              <p>Pending. Recommendations will be added when the analysis is complete.</p>
-            </section>
-            <section class="case-study-part case-study-part-wide" aria-labelledby="cs1-next">
-              <h4 id="cs1-next">Limitations and next steps</h4>
-              <p>[Be honest about what the analysis cannot show and what you would do next.]</p>
-            </section>
-          </div>
+        <article class="case-study card" data-reveal>
+          <h3 class="card__title">YOUR_CASE_STUDY_TITLE (template)</h3>
+          <dl class="case-study__list">
+            <div class="detail"><dt>Business question</dt><dd>To be added.</dd></div>
+            <div class="detail"><dt>Context</dt><dd>To be added.</dd></div>
+            <div class="detail"><dt>Dataset</dt><dd>To be added.</dd></div>
+            <div class="detail"><dt>Data quality issues</dt><dd>To be added.</dd></div>
+            <div class="detail"><dt>Analytical approach</dt><dd>To be added.</dd></div>
+            <div class="detail"><dt>Findings</dt><dd>To be added.</dd></div>
+            <div class="detail"><dt>Limitations</dt><dd>To be added.</dd></div>
+            <div class="detail"><dt>Recommendations</dt><dd>To be added.</dd></div>
+            <div class="detail"><dt>Next steps</dt><dd>To be added.</dd></div>
+          </dl>
         </article>
-        <!-- END CASE STUDY 1 -->
-
       </div>
     </section>
-    <!-- END: CASE STUDIES -->
 
-
-    <!-- ============================================================
-         START: EXPERIENCE (obhiggota)
-         Ekhon kono experience nei, ar eita sotti kotha. Kono fake job likhio na.
-         KIBHABE EDIT KORBE (jokhon sotti experience pabe):
-         1) Niche "empty-state" div ta (I do not have ... likha) delete koro.
-         2) Niche <ol id="experience-list"> er vitor TEMPLATE START ar TEMPLATE END -->
-            duita marker line muche dao, tahole template ta chalu hobe.
-         3) ROLE_TITLE, ORGANIZATION_OR_CLIENT, tarikh, responsibilities nijer real tothyo diye bodlao.
-         4) Aro experience lagle puro <li class="timeline-item experience-entry"> ... </li> copy koro.
-         ============================================================ -->
-    <section class="section section-alt" id="experience" aria-labelledby="experience-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="eyebrow">Experience</p>
-          <h2 id="experience-heading">Experience</h2>
+    <!--
+      LEARNING JOURNEY SECTION (id="journey").
+      This is for self-directed learning and personal projects. It is NOT a work history.
+      Do not add jobs or internships you have not had.
+      HOW TO ADD A MILESTONE: copy one li item, edit the date and text.
+    -->
+    <section class="section" id="journey" aria-labelledby="journey-title">
+      <div class="section__inner">
+        <header class="section__header" data-reveal>
+          <p class="section__eyebrow">Learning journey</p>
+          <h2 class="section__title" id="journey-title">Learning journey</h2>
+          <p class="section__intro">
+            I do not have professional analyst experience yet. This section records my
+            self-directed learning and personal projects.
+          </p>
         </header>
 
-        <!-- EDIT HERE: Experience pele ei puro div ta delete koro. -->
-        <div class="empty-state" id="experience-empty-state">
-          <p>I do not have professional analyst experience yet. I am building practical experience through the projects above and am open to internships, volunteering, and entry-level opportunities.</p>
-        </div>
-
-        <ol class="timeline" id="experience-list">
-          <!-- TEMPLATE START (chalu korte ei line ar niche er TEMPLATE END line muche dao)
-
-          <li class="timeline-item experience-entry">
-            <article class="card">
-              <h3 class="entry-title">ROLE_TITLE</h3>
-              <p class="entry-org">ORGANIZATION_OR_CLIENT</p>
-              <p class="entry-dates">
-                <time datetime="YYYY-MM">START_DATE</time> to <time datetime="YYYY-MM">END_DATE or Present</time>
-              </p>
-              <h4>Responsibilities</h4>
-              <ul>
-                <li>[Responsibility 1]</li>
-              </ul>
-              <h4>Projects or deliverables</h4>
-              <ul>
-                <li>[Deliverable 1]</li>
-              </ul>
-              <h4>Verifiable outcomes</h4>
-              <ul>
-                <li>[Only outcomes you can prove]</li>
-              </ul>
-            </article>
+        <ol class="timeline">
+          <li class="timeline__item card" data-reveal>
+            <p class="timeline__date">YOUR_START_YEAR</p>
+            <h3 class="timeline__title">PLACEHOLDER: first learning milestone</h3>
+            <p class="timeline__text">Describe something you really started or finished.</p>
           </li>
-
-          TEMPLATE END -->
+          <li class="timeline__item card" data-reveal>
+            <p class="timeline__date">YOUR_DATE</p>
+            <h3 class="timeline__title">PLACEHOLDER: next milestone</h3>
+            <p class="timeline__text">Add real milestones as they happen.</p>
+          </li>
         </ol>
       </div>
     </section>
-    <!-- END: EXPERIENCE -->
 
-
-    <!-- ============================================================
-         START: EDUCATION (shikkha)
-         KIBHABE EDIT KORBE:
-         - Nicher HSC entry er tothyo (institution, group, year) bodlao.
-         - Notun degree (Bachelor's, Master's) add korte: niche TEMPLATE START ar TEMPLATE END -->
-           duita marker line muche dao, tarpor tothyo bodlao.
-           Aro entry lagle puro <li class="timeline-item education-entry"> ... </li> copy kore paste koro.
-         - Je line dorkar nei (jemon Academic achievements) ta delete koro.
-         - HSC sesh hole data-status="completed" ar badge e "Completed" likho,
-           "Expected completion" er jaygay "Actual completion" likho.
-         ============================================================ -->
-    <section class="section" id="education" aria-labelledby="education-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="eyebrow">Education</p>
-          <h2 id="education-heading">Education</h2>
+    <!--
+      EDUCATION SECTION (id="education").
+      Fill in only true information. Status examples: Current, Completed, Planned.
+      HOW TO ADD ANOTHER ENTRY: copy the whole article and edit it.
+    -->
+    <section class="section" id="education" aria-labelledby="education-title">
+      <div class="section__inner">
+        <header class="section__header" data-reveal>
+          <p class="section__eyebrow">Education</p>
+          <h2 class="section__title" id="education-title">Education</h2>
         </header>
 
-        <ol class="timeline" id="education-list">
-
-          <!-- START EDUCATION ENTRY: CURRENT HSC -->
-          <li class="timeline-item education-entry" data-status="current">
-            <article class="card">
-              <p class="entry-status entry-status-current">Current</p>
-              <h3 class="entry-title">Higher Secondary Certificate (HSC)</h3>
-              <!-- EDIT HERE: INSTITUTION_NAME er jaygay tomar college er naam -->
-              <p class="entry-org">INSTITUTION_NAME</p>
-              <dl class="entry-details">
-                <!-- EDIT HERE: GROUP_OR_SUBJECT = tomar group (Science/Commerce/Arts). START_YEAR = bhorti hoyar bochor. EXPECTED_YEAR = HSC porikkhar bochor. -->
-                <div class="detail"><dt>Subject or major</dt><dd>GROUP_OR_SUBJECT</dd></div>
-                <div class="detail"><dt>Start year</dt><dd>START_YEAR</dd></div>
-                <div class="detail"><dt>Expected completion</dt><dd>EXPECTED_YEAR</dd></div>
-                <!-- EDIT HERE: Tomar sotti subject likho (jemon Higher Math, ICT). Na chaile line ta delete koro. -->
-                <div class="detail"><dt>Relevant coursework</dt><dd>[e.g. Mathematics, ICT]</dd></div>
-                <!-- EDIT HERE: Shudhu pramanito achievement likho (jemon GPA, boitti). Na thakle line ta delete koro. -->
-                <div class="detail"><dt>Academic achievements</dt><dd>[Add only verified achievements, or delete this line.]</dd></div>
-              </dl>
-            </article>
-          </li>
-          <!-- END EDUCATION ENTRY: CURRENT HSC -->
-
-          <!-- TEMPLATE START: Bachelor's, Master's ba onno course er jonno. Chalu korte ei line ar niche er TEMPLATE END line muche dao.
-
-          <li class="timeline-item education-entry" data-status="completed">
-            <article class="card">
-              <p class="entry-status entry-status-completed">Completed</p>
-              <h3 class="entry-title">QUALIFICATION_NAME</h3>
-              <p class="entry-org">INSTITUTION_NAME</p>
-              <dl class="entry-details">
-                <div class="detail"><dt>Subject or major</dt><dd>SUBJECT_OR_MAJOR</dd></div>
-                <div class="detail"><dt>Start year</dt><dd>START_YEAR</dd></div>
-                <div class="detail"><dt>Actual completion</dt><dd>COMPLETION_YEAR</dd></div>
-                <div class="detail"><dt>Relevant coursework</dt><dd>[Courses]</dd></div>
-                <div class="detail"><dt>Academic achievements</dt><dd>[Verified achievements only]</dd></div>
-              </dl>
-            </article>
-          </li>
-
-          TEMPLATE END -->
-
-        </ol>
+        <article class="card education-entry" data-reveal>
+          <h3 class="card__title">YOUR_INSTITUTION</h3>
+          <dl class="education-entry__details">
+            <div class="detail"><dt>Program or group</dt><dd>YOUR_PROGRAM_OR_GROUP</dd></div>
+            <div class="detail"><dt>Status</dt><dd>YOUR_STATUS (Current, Completed or Planned)</dd></div>
+            <div class="detail"><dt>Dates</dt><dd>YOUR_START_YEAR to YOUR_EXPECTED_YEAR</dd></div>
+          </dl>
+        </article>
       </div>
     </section>
-    <!-- END: EDUCATION -->
 
-
-    <!-- ============================================================
-         START: CERTIFICATIONS (certificate)
-         Ekhon kono certificate nei. Fake certificate likhio na.
-         KIBHABE EDIT KORBE (certificate pele):
-         1) Niche "empty-state" div ta delete koro.
-         2) Niche TEMPLATE START ar TEMPLATE END -->  marker duita muche dao.
-         3) CERTIFICATE_NAME, ISSUING_ORGANIZATION, tarikh, ID, link bodlao.
-         4) Aro certificate lagle puro <li class="certification-entry"> ... </li> copy koro.
-         Note: Course completion certificate kono professional license na. Naam e seta spasto likho.
-         ============================================================ -->
-    <section class="section section-alt" id="certifications" aria-labelledby="certifications-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="eyebrow">Certifications</p>
-          <h2 id="certifications-heading">Certifications</h2>
+    <!--
+      CERTIFICATIONS SECTION (id="certifications").
+      Nothing is listed because no certificates have been confirmed.
+      HOW TO ADD ONE: delete the empty-state paragraph and add an article with class
+      certificate-card containing: name, issuing organisation, completion date, and
+      an a tag to the verification link (target _blank, rel="noopener noreferrer").
+      Never list a certificate you have not earned.
+    -->
+    <section class="section" id="certifications" aria-labelledby="cert-title">
+      <div class="section__inner">
+        <header class="section__header" data-reveal>
+          <p class="section__eyebrow">Certifications</p>
+          <h2 class="section__title" id="cert-title">Certifications</h2>
         </header>
-
-        <!-- EDIT HERE: Certificate pele ei puro div ta delete koro. -->
-        <div class="empty-state" id="certifications-empty-state">
-          <p>No certifications to display yet. Verified certificates will be added here as I complete them.</p>
-        </div>
-
-        <ul class="certification-grid" id="certification-list">
-          <!-- TEMPLATE START (chalu korte ei line ar niche er TEMPLATE END line muche dao)
-
-          <li class="certification-entry">
-            <article class="card">
-              <h3 class="entry-title">CERTIFICATE_NAME</h3>
-              <p class="entry-org">ISSUING_ORGANIZATION</p>
-              <dl class="entry-details">
-                <div class="detail"><dt>Issued</dt><dd><time datetime="YYYY-MM">ISSUE_DATE</time></dd></div>
-                <div class="detail"><dt>Expires</dt><dd>EXPIRY_DATE or "No expiry"</dd></div>
-                <div class="detail"><dt>Credential ID</dt><dd>CREDENTIAL_ID</dd></div>
-              </dl>
-              <ul class="entry-links">
-                <li><a class="btn btn-small" href="YOUR_VERIFICATION_URL" target="_blank" rel="noopener noreferrer">Verify credential</a></li>
-                <li><a class="btn btn-small btn-outline" href="assets/certificates/YOUR_CERTIFICATE_FILE.pdf" target="_blank" rel="noopener noreferrer">View certificate</a></li>
-              </ul>
-            </article>
-          </li>
-
-          TEMPLATE END -->
-        </ul>
+        <p class="empty-state card" data-reveal>
+          No certifications to display yet. Verified certificates will be added as they are completed.
+        </p>
       </div>
     </section>
-    <!-- END: CERTIFICATIONS -->
 
-
-    <!-- ============================================================
-         START: ACHIEVEMENTS AND ADDITIONAL WORK
-         KIBHABE EDIT KORBE:
-         - Sotti kono achievement pele, oi category r <li class="achievement-empty">No entries yet.</li> line ta muche
-           niche er moto likho:
-           <li class="achievement-item">Naam, bochor. Chhoto bornona.</li>
-         - Je category dorkar nei, ta puro <article> ... </article> delete koro.
-         - Kono fake achievement likhio na.
-         ============================================================ -->
-    <section class="section" id="achievements" aria-labelledby="achievements-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="eyebrow">Achievements</p>
-          <h2 id="achievements-heading">Achievements and Additional Work</h2>
-          <p class="section-intro">Competitions, contributions, and activities will appear here when I have verified entries to share.</p>
+    <!--
+      ACHIEVEMENTS SECTION (id="achievements").
+      Add only real, verifiable milestones. No invented awards, ranks or numbers.
+      HOW TO ADD: delete the empty-state paragraph and add li items inside a ul with class achievement-list.
+    -->
+    <section class="section" id="achievements" aria-labelledby="achievements-title">
+      <div class="section__inner">
+        <header class="section__header" data-reveal>
+          <p class="section__eyebrow">Achievements</p>
+          <h2 class="section__title" id="achievements-title">Achievements</h2>
         </header>
-
-        <div class="achievement-grid">
-
-          <article class="card achievement-category" id="achievements-competitions">
-            <h3>Competitions</h3>
-            <ul class="achievement-list">
-              <!-- EDIT HERE: Competition e ongsho nile ekhane likho. -->
-              <li class="achievement-empty">No entries yet.</li>
-            </ul>
-          </article>
-
-          <article class="card achievement-category" id="achievements-awards">
-            <h3>Awards</h3>
-            <ul class="achievement-list">
-              <!-- EDIT HERE: Award pele ekhane likho. -->
-              <li class="achievement-empty">No entries yet.</li>
-            </ul>
-          </article>
-
-          <article class="card achievement-category" id="achievements-publications">
-            <h3>Relevant Publications</h3>
-            <ul class="achievement-list">
-              <!-- EDIT HERE: Lekha prokashito hole ekhane likho. -->
-              <li class="achievement-empty">No entries yet.</li>
-            </ul>
-          </article>
-
-          <article class="card achievement-category" id="achievements-open-source">
-            <h3>Open-Source Contributions</h3>
-            <ul class="achievement-list">
-              <!-- EDIT HERE: Open-source e contribute korle ekhane likho. -->
-              <li class="achievement-empty">No entries yet.</li>
-            </ul>
-          </article>
-
-          <article class="card achievement-category" id="achievements-volunteer">
-            <h3>Volunteer Analytical Work</h3>
-            <ul class="achievement-list">
-              <!-- EDIT HERE: Voluntary data kaj korle ekhane likho. -->
-              <li class="achievement-empty">No entries yet.</li>
-            </ul>
-          </article>
-
-          <article class="card achievement-category" id="achievements-extracurricular">
-            <h3>Relevant Extracurricular Activities</h3>
-            <ul class="achievement-list">
-              <!-- EDIT HERE: Data/tech somporkito club ba activity thakle ekhane likho. -->
-              <li class="achievement-empty">No entries yet.</li>
-            </ul>
-          </article>
-
-        </div>
+        <p class="empty-state card" data-reveal>
+          No achievements listed yet. Real milestones will be added here when they happen.
+        </p>
       </div>
     </section>
-    <!-- END: ACHIEVEMENTS -->
 
-
-    <!-- ============================================================
-         START: CONTACT (jogajog)
-         Contact form deya hoyni, karon GitHub Pages e form kaj korte alada service lage.
-         Tai shudhu email o profile link dewa hoyeche.
-         ============================================================ -->
-    <section class="section section-alt" id="contact" aria-labelledby="contact-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="eyebrow">Contact</p>
-          <h2 id="contact-heading">Get in Touch</h2>
-          <p class="section-intro">I am open to learning opportunities, internships, entry-level roles, and small freelance projects. Email is the best way to reach me.</p>
+    <!--
+      CONTACT SECTION (id="contact").
+      There is no contact form because there is no backend. Use simple links instead.
+      The placeholder spans show that something must be replaced. HOW TO REPLACE:
+      change a span into an a tag. For email use a mailto address. For profiles use the
+      full web address and add target _blank with rel="noopener noreferrer".
+    -->
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="section__inner">
+        <header class="section__header" data-reveal>
+          <p class="section__eyebrow">Contact</p>
+          <h2 class="section__title" id="contact-title">Get in touch</h2>
+          <p class="section__intro">I am open to feedback, learning opportunities and conversations.</p>
         </header>
 
         <ul class="contact-list">
-          <li class="contact-item">
-            <span class="contact-label">Email</span>
-            <!-- EDIT HERE: YOUR_EMAIL@example.com ei duita jaygay-i tomar asol email likho (href="mailto:..." ar dekhano likha). -->
-            <a class="contact-link" href="mailto:YOUR_EMAIL@example.com">YOUR_EMAIL@example.com</a>
+          <li class="contact-list__item card" data-reveal>
+            <span class="contact-list__label">Email</span>
+            <span class="link-placeholder">YOUR_EMAIL (replace before publishing)</span>
           </li>
-          <li class="contact-item">
-            <span class="contact-label">LinkedIn</span>
-            <!-- EDIT HERE: YOUR_LINKEDIN_URL duita jaygay-i LinkedIn profile link likho. LinkedIn na thakle puro <li> delete koro. -->
-            <a class="contact-link" href="YOUR_LINKEDIN_URL" target="_blank" rel="noopener noreferrer">YOUR_LINKEDIN_URL</a>
+          <li class="contact-list__item card" data-reveal>
+            <span class="contact-list__label">GitHub</span>
+            <span class="link-placeholder">YOUR_GITHUB_URL (replace before publishing)</span>
           </li>
-          <li class="contact-item">
-            <span class="contact-label">GitHub</span>
-            <!-- EDIT HERE: YOUR_GITHUB_URL duita jaygay-i GitHub profile link likho. -->
-            <a class="contact-link" href="YOUR_GITHUB_URL" target="_blank" rel="noopener noreferrer">YOUR_GITHUB_URL</a>
+          <li class="contact-list__item card" data-reveal>
+            <span class="contact-list__label">LinkedIn</span>
+            <span class="link-placeholder">YOUR_LINKEDIN_URL (replace before publishing)</span>
           </li>
-          <!-- OPTIONAL: Onno link (Kaggle ityadi) dite chaile niche er block chalu koro.
-               Chalu korte TEMPLATE START ar TEMPLATE END -->  marker duita muche dao ar YOUR_KAGGLE_URL bodlao.
-          TEMPLATE START
-          <li class="contact-item">
-            <span class="contact-label">Kaggle</span>
-            <a class="contact-link" href="YOUR_KAGGLE_URL" target="_blank" rel="noopener noreferrer">YOUR_KAGGLE_URL</a>
-          </li>
-          TEMPLATE END -->
         </ul>
       </div>
     </section>
-    <!-- END: CONTACT -->
 
   </main>
 
-
-  <!-- ============================================================
-       START: FOOTER (shobar niche)
-       ============================================================ -->
+  <!--
+    FOOTER. The span with id footer-year is filled with the current year by script.js.
+    The first line shows a fallback year in case JavaScript does not run: edit it yearly if you like.
+  -->
   <footer class="site-footer" id="site-footer">
-    <div class="container footer-inner">
-
-      <div class="footer-brand">
-        <!-- EDIT HERE: YOUR_NAME er jaygay tomar naam -->
-        <p class="footer-name">YOUR_NAME</p>
-        <p class="footer-tagline">Aspiring Data Analyst</p>
-      </div>
-
-      <nav class="footer-nav" aria-label="Footer">
-        <ul class="footer-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#case-studies">Case Studies</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#education">Education</a></li>
-          <li><a href="#certifications">Certifications</a></li>
-          <li><a href="#achievements">Achievements</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-
-      <!-- EDIT HERE: YOUR_GITHUB_URL ar YOUR_LINKEDIN_URL ekhaneo likho. -->
-      <ul class="social-links footer-social" aria-label="Professional profiles">
-        <li><a class="social-link" href="YOUR_GITHUB_URL" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-        <li><a class="social-link" href="YOUR_LINKEDIN_URL" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-      </ul>
-
-      <!-- EDIT HERE: YOUR_NAME er jaygay tomar naam. "YEAR" likha ta script.js (porer step) nijei bochor bosiye debe,
-           tai eita bodlio na. -->
-      <p class="footer-copy">
-        &copy; <span id="current-year">YEAR</span> YOUR_NAME. All rights reserved.
+    <div class="site-footer__inner">
+      <p class="site-footer__identity">
+        YOUR_NAME, aspiring Data Analyst. &copy; <span id="footer-year">2026</span>
       </p>
-
-      <a class="back-to-top" href="#top">Back to top</a>
-
+      <nav class="site-footer__nav" aria-label="Footer navigation">
+        <a href="#projects">Projects</a>
+        <a href="#case-studies">Case Studies</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <p class="site-footer__note">
+        This is a learning portfolio. Content marked as a template is a placeholder, not completed work.
+      </p>
+      <a class="back-to-top" id="back-to-top" href="#home">Back to top</a>
     </div>
   </footer>
-  <!-- END: FOOTER -->
 
-  <!-- script.js er kaj: mobile menu chalano ar footer e bochor dekhano. Eita bodlio na. -->
-  <!--Gurutthopurno 3 ta kotha
-TEMPLATE START / TEMPLATE END --> 
-<!--1: marker: Je jaygay ei marker ache, oi block ta ekhon "bondho" (comment kora). 
-  Chalu korte shudhu ei marker line duita muche dao, vitorer code thik thakbe.
-2: [ ... ] bracket: Bracket er vitorer likha muche nijer real kotha likho, bracket o muche dio.
-3: Link na thakle: Je link ekhono nei, oi <li> line ta delete koro, tahole broken link thakbe na.-->
-  <script src="script.js" defer></script>
 </body>
-            </html>
+</html>
