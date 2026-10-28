@@ -24,7 +24,7 @@
     SAFE TO EDIT: any visible text, and any comment like this one.
     DO NOT CHANGE without updating style.css and script.js too:
       every id="..." value, every data-... attribute, and class
-      names that start with "scene-" or "js-".
+      names that start with "scene-", "light-rope" or "js-".
 
     COMMENT RULE: never type two hyphens followed by a greater-than
     sign inside a comment. That ends the comment early and the rest
@@ -34,7 +34,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Title and description: shown in browser tabs and search results. -->
   <title>Joseph Richer | Aspiring Data Analyst Learning Portfolio</title>
   <meta name="description" content="Learning and project portfolio of Joseph Richer, an aspiring Data Analyst. Projects, skills and case studies are added as they are genuinely completed.">
   <meta name="theme-color" content="#0a0705">
@@ -43,20 +42,14 @@
   <!-- Favicon: favicon.svg is in the repository root. -->
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
-  <!-- Stylesheet: style.css must stay in the same folder as this file. -->
+  <!-- Stylesheet and script: both must stay in the same folder as this file. -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- JavaScript: defer means it runs after the page is read. -->
   <script src="script.js" defer></script>
 </head>
 
 <body class="no-js">
-  <!--
-    The body starts with the class no-js. script.js replaces it
-    with js-ready when it starts.
-  -->
+  <!-- The body starts as no-js. script.js changes it to js-ready. -->
 
-  <!-- Skip link: lets keyboard users jump past the menu. Keep it as the first element. -->
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
   <!-- Decorative background layers. Hidden from screen readers. -->
@@ -66,7 +59,7 @@
     <div class="bg-layer bg-particles" id="bg-particles"></div>
   </div>
 
-  <!-- HEADER AND NAVIGATION. The ids site-header, nav-toggle and site-nav are used by script.js. -->
+  <!-- HEADER AND NAVIGATION. ids site-header, nav-toggle, site-nav are used by script.js. -->
   <header class="site-header" id="site-header">
     <div class="site-header__inner">
       <a class="brand" href="#home" aria-label="Joseph Richer, back to the top of the page">
@@ -74,17 +67,13 @@
         <span class="brand__text">Joseph Richer</span>
       </a>
 
-      <!-- Mobile menu button. script.js toggles aria-expanded. -->
       <button class="nav-toggle" id="nav-toggle" type="button"
               aria-expanded="false" aria-controls="site-nav">
         <span class="nav-toggle__label">Menu</span>
         <span class="nav-toggle__bars" aria-hidden="true"></span>
       </button>
 
-      <!--
-        Main navigation. Every href must match a section id further down.
-        To remove a section, delete both its link here and the section itself.
-      -->
+      <!-- Every href must match a section id further down. -->
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <ul class="site-nav__list">
           <li><a class="site-nav__link" data-nav-link href="#home">Home</a></li>
@@ -104,11 +93,7 @@
 
   <main id="main-content" tabindex="-1">
 
-    <!--
-      HERO SECTION (id="home").
-      Left side: real text. Right side: the 3D scene area.
-      The only h1 on the page is in here.
-    -->
+    <!-- HERO SECTION (id="home"). The only h1 on the page is here. -->
     <section class="hero" id="home" aria-labelledby="hero-title">
       <div class="hero__content" data-reveal>
         <p class="hero__eyebrow">Interactive learning portfolio</p>
@@ -127,7 +112,7 @@
         </div>
         <p class="hero__hint">
           <span class="hero__hint-dot" aria-hidden="true"></span>
-          Try the interactive 3D desk. Pull the cord to switch on the light.
+          Pull the rope to switch on the desk light. Press and stretch any box.
         </p>
         <a class="hero__scroll" href="#about">
           <span class="hero__scroll-text">Scroll to explore</span>
@@ -138,26 +123,21 @@
       <!--
         3D SCENE AREA. NECESSARY for the 3D experience.
         Do not rename scene-container, scene-mount, scene-status,
-        scene-fallback, scene-description or any control id.
-
-        data-three-url: a pinned Three.js module address. script.js loads it
-        only when the browser supports WebGL, then builds the desk, monitor,
-        floating cards and cord in code. No 3D model files are needed.
+        scene-fallback or scene-description.
+        data-three-url: pinned Three.js module address. script.js loads it
+        only when WebGL works, then builds everything in code.
       -->
       <div class="scene" id="scene-container"
            data-three-url="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
            data-scene-state="loading">
 
-        <!-- script.js puts the 3D canvas inside this empty div. -->
         <div class="scene__mount" id="scene-mount" role="img"
-             aria-label="Interactive 3D desk with a monitor showing charts, floating data cards and a hanging light cord. Equivalent buttons are listed below the scene."></div>
+             aria-label="Interactive 3D desk with a monitor, floating data cards, books, a graduation cap, a certificate frame, a trophy, an envelope and a hanging lamp with a pull rope. Equivalent buttons are listed below the scene."></div>
 
-        <!-- Status message. role=status makes screen readers announce changes. -->
         <p class="scene__status" id="scene-status" role="status" aria-live="polite">
           Preparing the 3D scene...
         </p>
 
-        <!-- Fallback panel. Shown without JavaScript or if the scene fails. -->
         <div class="scene__fallback" id="scene-fallback">
           <p class="scene__fallback-title">3D scene not available</p>
           <p class="scene__fallback-text">
@@ -175,57 +155,53 @@
       </div>
 
       <!--
-        SCENE CONTROLS. A real-HTML version of every 3D interaction.
-        Anyone can use these buttons with a mouse, finger or keyboard.
+        SCENE CONTROLS. Real HTML versions of every 3D interaction.
+        The rope button (id light-toggle) does the same as the 3D rope.
+        Tap it, press Enter or Space, or drag it downwards.
       -->
       <div class="scene-controls" id="scene-controls" role="group" aria-label="3D scene controls">
-        <p class="scene-controls__instructions" id="scene-instructions">
-          Click or tap objects in the scene, or use these buttons.
-        </p>
 
-        <!-- Light switch. Same effect as pulling the cord in 3D. -->
-        <button class="button button--glow" id="light-toggle" type="button"
-                aria-pressed="false" data-scene-action="toggle-light">
-          <span class="button__label">Pull the cord: light is off</span>
-        </button>
+        <div class="scene-controls__top">
+          <button class="light-rope" id="light-toggle" type="button"
+                  aria-pressed="false" data-scene-action="toggle-light">
+            <span class="light-rope__lamp" aria-hidden="true"></span>
+            <span class="light-rope__line" aria-hidden="true"></span>
+            <span class="light-rope__knob" aria-hidden="true"></span>
+            <span class="light-rope__hint" aria-hidden="true">Pull</span>
+            <span class="button__label sr-only">Pull the cord: light is off</span>
+          </button>
 
-        <button class="button button--secondary" id="scene-reset" type="button"
-                data-scene-action="reset-view">
-          Re-centre view
-        </button>
+          <div class="scene-controls__side">
+            <p class="scene-controls__instructions" id="scene-instructions">
+              Tap objects in the scene, or use the buttons below. Pull the rope for light.
+            </p>
+            <button class="button button--secondary" id="scene-reset" type="button"
+                    data-scene-action="reset-view">
+              Re-centre view
+            </button>
+          </div>
+        </div>
 
         <!--
-          Object list. data-scene-object must match the object names that script.js
-          creates in 3D. data-target is the section that object leads to.
+          Object list. data-scene-object must match an id in script.js (OBJECTS).
+          data-target is the section that object leads to. Objects without a
+          data-target are decoration and only show a description.
         -->
         <ul class="scene-objects" id="scene-object-list" aria-label="Objects in the scene">
-          <li>
-            <button class="scene-objects__button" type="button"
-                    data-scene-object="monitor" data-target="#projects">
-              Monitor: projects
-            </button>
-          </li>
-          <li>
-            <button class="scene-objects__button" type="button"
-                    data-scene-object="data-cards" data-target="#skills">
-              Floating data cards: skills
-            </button>
-          </li>
-          <li>
-            <button class="scene-objects__button" type="button"
-                    data-scene-object="notebook" data-target="#case-studies">
-              Notebook: case studies
-            </button>
-          </li>
-          <li>
-            <button class="scene-objects__button" type="button"
-                    data-scene-object="chart-cube" data-target="#about">
-              Chart cube: about this portfolio
-            </button>
-          </li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="monitor" data-target="#projects">Monitor: projects</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="data-cards" data-target="#skills">Data cards: skills</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="notebook" data-target="#case-studies">Notebook: case studies</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="chart-cube" data-target="#about">Chart cube: about</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="books" data-target="#journey">Books: learning journey</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="grad-cap" data-target="#education">Graduation cap: education</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="certificate" data-target="#certifications">Frame: certifications</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="trophy" data-target="#achievements">Trophy: achievements</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="mail" data-target="#contact">Envelope: contact</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="database">Database stack: decoration</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="mug">Coffee mug: decoration</button></li>
+          <li><button class="scene-objects__button" type="button" data-scene-object="plant">Plant: decoration</button></li>
         </ul>
 
-        <!-- Description area. script.js writes what the selected object means. -->
         <div class="scene-description" id="scene-description" role="status" aria-live="polite">
           <p class="scene-description__text">
             Select an object to learn what it represents.
@@ -237,10 +213,7 @@
       </div>
     </section>
 
-    <!--
-      ABOUT SECTION (id="about").
-      Replace every placeholder sentence with your own words.
-    -->
+    <!-- ABOUT SECTION (id="about"). Replace every placeholder with your own words. -->
     <section class="section" id="about" aria-labelledby="about-title">
       <div class="section__inner">
         <header class="section__header" data-reveal>
@@ -286,10 +259,8 @@
     </section>
 
     <!--
-      SKILLS SECTION (id="skills").
-      These are topics I am learning, NOT proof of mastery.
-      Allowed labels: Learning, Practicing, Project-ready.
-      The data-level value should match the visible label in lowercase.
+      SKILLS SECTION (id="skills"). Topics I am learning, NOT proof of mastery.
+      Allowed labels: Learning, Practicing, Project-ready. data-level matches in lowercase.
       HOW TO ADD A SKILL: copy one li item inside a group and edit it.
     -->
     <section class="section" id="skills" aria-labelledby="skills-title">
@@ -306,72 +277,36 @@
           <article class="skill-group card" data-reveal>
             <h3 class="card__title">Data tools</h3>
             <ul class="skill-list">
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">Excel and spreadsheets</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">SQL</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">Power BI</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">Excel and spreadsheets</span><span class="skill-list__level">Learning</span></li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">SQL</span><span class="skill-list__level">Learning</span></li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">Power BI</span><span class="skill-list__level">Learning</span></li>
             </ul>
           </article>
 
           <article class="skill-group card" data-reveal>
             <h3 class="card__title">Python for analysis</h3>
             <ul class="skill-list">
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">Python</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">pandas and NumPy</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">Matplotlib and Seaborn</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">Python</span><span class="skill-list__level">Learning</span></li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">pandas and NumPy</span><span class="skill-list__level">Learning</span></li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">Matplotlib and Seaborn</span><span class="skill-list__level">Learning</span></li>
             </ul>
           </article>
 
           <article class="skill-group card" data-reveal>
             <h3 class="card__title">Analysis methods</h3>
             <ul class="skill-list">
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">Statistics</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">Data cleaning</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">Exploratory Data Analysis (EDA)</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">Statistics</span><span class="skill-list__level">Learning</span></li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">Data cleaning</span><span class="skill-list__level">Learning</span></li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">Exploratory Data Analysis (EDA)</span><span class="skill-list__level">Learning</span></li>
             </ul>
           </article>
 
           <article class="skill-group card" data-reveal>
             <h3 class="card__title">Communication and thinking</h3>
             <ul class="skill-list">
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">Data visualization</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">Business problem-solving</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
-              <li class="skill-list__item" data-level="learning">
-                <span class="skill-list__name">AI-assisted analytics</span>
-                <span class="skill-list__level">Learning</span>
-              </li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">Data visualization</span><span class="skill-list__level">Learning</span></li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">Business problem-solving</span><span class="skill-list__level">Learning</span></li>
+              <li class="skill-list__item" data-level="learning"><span class="skill-list__name">AI-assisted analytics</span><span class="skill-list__level">Learning</span></li>
             </ul>
           </article>
         </div>
@@ -379,12 +314,11 @@
     </section>
 
     <!--
-      PROJECTS SECTION (id="projects").
-      The three cards below are EXAMPLE PLACEHOLDERS, not finished work.
+      PROJECTS SECTION (id="projects"). The three cards are EXAMPLE PLACEHOLDERS.
       HOW TO ADD A PROJECT: copy one whole article with class project-card.
-      Statuses to use: Planned, In progress, Completed. Use Completed only when true.
-      LINKS: when you have a real repository or demo, replace the span with
-      an a tag that has the real address, target _blank and rel="noopener noreferrer".
+      Statuses: Planned, In progress, Completed. Use Completed only when true.
+      LINKS: when you have a real link, replace the span with an a tag that has
+      the real address, target _blank and rel="noopener noreferrer".
     -->
     <section class="section" id="projects" aria-labelledby="projects-title">
       <div class="section__inner">
@@ -457,10 +391,7 @@
       </div>
     </section>
 
-    <!--
-      CASE STUDIES SECTION (id="case-studies").
-      Keep this placeholder state until you have a real case study.
-    -->
+    <!-- CASE STUDIES SECTION (id="case-studies"). Keep this state until you have a real case study. -->
     <section class="section" id="case-studies" aria-labelledby="case-title">
       <div class="section__inner">
         <header class="section__header" data-reveal>
@@ -487,9 +418,8 @@
     </section>
 
     <!--
-      LEARNING JOURNEY SECTION (id="journey").
-      Self-directed learning and personal projects. NOT a work history.
-      HOW TO ADD A MILESTONE: copy one li item, edit the date and text.
+      LEARNING JOURNEY SECTION (id="journey"). Self-directed learning only.
+      NOT a work history. HOW TO ADD A MILESTONE: copy one li item.
     -->
     <section class="section" id="journey" aria-labelledby="journey-title">
       <div class="section__inner">
@@ -517,10 +447,7 @@
       </div>
     </section>
 
-    <!--
-      EDUCATION SECTION (id="education").
-      Fill in only true information. HOW TO ADD ANOTHER ENTRY: copy the whole article.
-    -->
+    <!-- EDUCATION SECTION (id="education"). Fill in only true information. -->
     <section class="section" id="education" aria-labelledby="education-title">
       <div class="section__inner">
         <header class="section__header" data-reveal>
@@ -539,11 +466,7 @@
       </div>
     </section>
 
-    <!--
-      CERTIFICATIONS SECTION (id="certifications").
-      Nothing is listed because no certificates have been confirmed.
-      Never list a certificate you have not earned.
-    -->
+    <!-- CERTIFICATIONS SECTION (id="certifications"). Never list a certificate you have not earned. -->
     <section class="section" id="certifications" aria-labelledby="cert-title">
       <div class="section__inner">
         <header class="section__header" data-reveal>
@@ -556,10 +479,7 @@
       </div>
     </section>
 
-    <!--
-      ACHIEVEMENTS SECTION (id="achievements").
-      Add only real, verifiable milestones. No invented awards, ranks or numbers.
-    -->
+    <!-- ACHIEVEMENTS SECTION (id="achievements"). Real, verifiable milestones only. -->
     <section class="section" id="achievements" aria-labelledby="achievements-title">
       <div class="section__inner">
         <header class="section__header" data-reveal>
@@ -573,10 +493,9 @@
     </section>
 
     <!--
-      CONTACT SECTION (id="contact").
-      No contact form because there is no backend. Use simple links instead.
+      CONTACT SECTION (id="contact"). No contact form because there is no backend.
       HOW TO REPLACE: change a span into an a tag. For email use a mailto address.
-      For profiles use the full web address with target _blank and rel="noopener noreferrer".
+      For profiles use the full address with target _blank and rel="noopener noreferrer".
     -->
     <section class="section" id="contact" aria-labelledby="contact-title">
       <div class="section__inner">
@@ -605,9 +524,7 @@
 
   </main>
 
-  <!--
-    FOOTER. The span with id footer-year is filled with the current year by script.js.
-  -->
+  <!-- FOOTER. The span with id footer-year is filled by script.js. -->
   <footer class="site-footer" id="site-footer">
     <div class="site-footer__inner">
       <p class="site-footer__identity">
