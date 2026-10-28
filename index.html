@@ -8,10 +8,11 @@
     This is index.html, the content of your portfolio.
     It works together with style.css (looks) and script.js (behaviour).
 
+    The name Joseph Richer is already filled in. To change it,
+    search for "Joseph Richer" in GitHub's editor.
+
     HOW TO FIND PLACEHOLDERS:
-    Use the search feature in GitHub's editor and look for these words.
-    Replace every one before you share the site publicly.
-      YOUR_NAME
+    Search for these words. Replace each one before sharing the site.
       YOUR_EMAIL
       YOUR_GITHUB_URL
       YOUR_LINKEDIN_URL
@@ -33,10 +34,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Title and description: shown in browser tabs and search results. Replace YOUR_NAME. -->
-  <title>YOUR_NAME | Aspiring Data Analyst Learning Portfolio</title>
-  <meta name="description" content="Learning and project portfolio of YOUR_NAME, an aspiring Data Analyst. Projects, skills and case studies are added as they are genuinely completed.">
-  <meta name="theme-color" content="#05080f">
+  <!-- Title and description: shown in browser tabs and search results. -->
+  <title>Joseph Richer | Aspiring Data Analyst Learning Portfolio</title>
+  <meta name="description" content="Learning and project portfolio of Joseph Richer, an aspiring Data Analyst. Projects, skills and case studies are added as they are genuinely completed.">
+  <meta name="theme-color" content="#0a0705">
   <meta name="color-scheme" content="dark">
 
   <!-- Favicon: favicon.svg is in the repository root. -->
@@ -51,18 +52,14 @@
 
 <body class="no-js">
   <!--
-    The body starts with the class no-js. script.js should replace it
-    with js-ready when it starts. style.css can use this to show or hide
-    the fallback content for visitors without JavaScript.
+    The body starts with the class no-js. script.js replaces it
+    with js-ready when it starts.
   -->
 
   <!-- Skip link: lets keyboard users jump past the menu. Keep it as the first element. -->
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
-  <!--
-    Decorative background layers. aria-hidden hides them from screen readers.
-    style.css draws the grid and glow. script.js may draw particles into the canvas mount.
-  -->
+  <!-- Decorative background layers. Hidden from screen readers. -->
   <div class="bg-layers" id="bg-layers" aria-hidden="true">
     <div class="bg-layer bg-grid"></div>
     <div class="bg-layer bg-glow"></div>
@@ -72,12 +69,12 @@
   <!-- HEADER AND NAVIGATION. The ids site-header, nav-toggle and site-nav are used by script.js. -->
   <header class="site-header" id="site-header">
     <div class="site-header__inner">
-      <a class="brand" href="#home" aria-label="YOUR_NAME, back to the top of the page">
+      <a class="brand" href="#home" aria-label="Joseph Richer, back to the top of the page">
         <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
-        <span class="brand__text">YOUR_NAME</span>
+        <span class="brand__text">Joseph Richer</span>
       </a>
 
-      <!-- Mobile menu button. script.js toggles aria-expanded and the open state on site-nav. -->
+      <!-- Mobile menu button. script.js toggles aria-expanded. -->
       <button class="nav-toggle" id="nav-toggle" type="button"
               aria-expanded="false" aria-controls="site-nav">
         <span class="nav-toggle__label">Menu</span>
@@ -87,7 +84,6 @@
       <!--
         Main navigation. Every href must match a section id further down.
         To remove a section, delete both its link here and the section itself.
-        data-nav-link lets script.js highlight the current section.
       -->
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <ul class="site-nav__list">
@@ -111,13 +107,13 @@
     <!--
       HERO SECTION (id="home").
       Left side: real text. Right side: the 3D scene area.
-      The only h1 on the page is in here. Replace YOUR_NAME.
+      The only h1 on the page is in here.
     -->
     <section class="hero" id="home" aria-labelledby="hero-title">
       <div class="hero__content" data-reveal>
         <p class="hero__eyebrow">Interactive learning portfolio</p>
         <h1 class="hero__title" id="hero-title">
-          Hi, I am <span class="hero__name">YOUR_NAME</span>,
+          Hi, I am <span class="hero__name">Joseph Richer</span>,
           an aspiring Data Analyst.
         </h1>
         <p class="hero__lead">
@@ -147,7 +143,6 @@
         data-three-url: a pinned Three.js module address. script.js loads it
         only when the browser supports WebGL, then builds the desk, monitor,
         floating cards and cord in code. No 3D model files are needed.
-        Pinning a version keeps the scene from changing without warning.
       -->
       <div class="scene" id="scene-container"
            data-three-url="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
@@ -157,18 +152,12 @@
         <div class="scene__mount" id="scene-mount" role="img"
              aria-label="Interactive 3D desk with a monitor showing charts, floating data cards and a hanging light cord. Equivalent buttons are listed below the scene."></div>
 
-        <!--
-          Status message. role=status makes screen readers announce changes.
-          script.js changes the text: loading, ready, or the reason it failed.
-        -->
+        <!-- Status message. role=status makes screen readers announce changes. -->
         <p class="scene__status" id="scene-status" role="status" aria-live="polite">
           Preparing the 3D scene...
         </p>
 
-        <!--
-          Fallback panel. Visible by default. script.js hides it once the scene
-          works. style.css can also hide it when the body has the js-ready class.
-        -->
+        <!-- Fallback panel. Shown without JavaScript or if the scene fails. -->
         <div class="scene__fallback" id="scene-fallback">
           <p class="scene__fallback-title">3D scene not available</p>
           <p class="scene__fallback-text">
@@ -188,15 +177,13 @@
       <!--
         SCENE CONTROLS. A real-HTML version of every 3D interaction.
         Anyone can use these buttons with a mouse, finger or keyboard.
-        script.js connects them. Controls are hidden until the scene is ready
-        only if style.css chooses to do so. They work without hovering.
       -->
       <div class="scene-controls" id="scene-controls" role="group" aria-label="3D scene controls">
         <p class="scene-controls__instructions" id="scene-instructions">
           Click or tap objects in the scene, or use these buttons.
         </p>
 
-        <!-- Light switch. Same effect as pulling the cord in 3D. script.js keeps aria-pressed updated. -->
+        <!-- Light switch. Same effect as pulling the cord in 3D. -->
         <button class="button button--glow" id="light-toggle" type="button"
                 aria-pressed="false" data-scene-action="toggle-light">
           <span class="button__label">Pull the cord: light is off</span>
@@ -210,7 +197,6 @@
         <!--
           Object list. data-scene-object must match the object names that script.js
           creates in 3D. data-target is the section that object leads to.
-          Remove a list item only if you also remove that object in script.js.
         -->
         <ul class="scene-objects" id="scene-object-list" aria-label="Objects in the scene">
           <li>
@@ -239,15 +225,11 @@
           </li>
         </ul>
 
-        <!--
-          Description area. script.js writes what the selected object means.
-          role=status with aria-live announces the text to screen readers.
-        -->
+        <!-- Description area. script.js writes what the selected object means. -->
         <div class="scene-description" id="scene-description" role="status" aria-live="polite">
           <p class="scene-description__text">
             Select an object to learn what it represents.
           </p>
-          <!-- script.js can reveal this link to open the matching section. -->
           <a class="scene-description__link" id="scene-description-link" href="#projects" hidden>
             Go to section
           </a>
@@ -258,7 +240,6 @@
     <!--
       ABOUT SECTION (id="about").
       Replace every placeholder sentence with your own words.
-      Do not write a biography you cannot back up.
     -->
     <section class="section" id="about" aria-labelledby="about-title">
       <div class="section__inner">
@@ -307,10 +288,9 @@
     <!--
       SKILLS SECTION (id="skills").
       These are topics I am learning, NOT proof of mastery.
-      Levels are plain words, not percentages. Allowed labels: Learning, Practicing, Project-ready.
-      The data-level value should match the visible label in lowercase so style.css can style it.
-      Change a label only if it is true. HOW TO ADD A SKILL: copy one li item inside a group
-      and edit its name and level. HOW TO REMOVE: delete the whole li item.
+      Allowed labels: Learning, Practicing, Project-ready.
+      The data-level value should match the visible label in lowercase.
+      HOW TO ADD A SKILL: copy one li item inside a group and edit it.
     -->
     <section class="section" id="skills" aria-labelledby="skills-title">
       <div class="section__inner">
@@ -401,12 +381,10 @@
     <!--
       PROJECTS SECTION (id="projects").
       The three cards below are EXAMPLE PLACEHOLDERS, not finished work.
-      HOW TO ADD A PROJECT: copy one whole article with class project-card,
-      paste it after the last one, and edit the text.
+      HOW TO ADD A PROJECT: copy one whole article with class project-card.
       Statuses to use: Planned, In progress, Completed. Use Completed only when true.
       LINKS: when you have a real repository or demo, replace the span with
       an a tag that has the real address, target _blank and rel="noopener noreferrer".
-      Delete any link row you do not have.
     -->
     <section class="section" id="projects" aria-labelledby="projects-title">
       <div class="section__inner">
@@ -482,7 +460,6 @@
     <!--
       CASE STUDIES SECTION (id="case-studies").
       Keep this placeholder state until you have a real case study.
-      Then replace each line with your own writing, in the same order.
     -->
     <section class="section" id="case-studies" aria-labelledby="case-title">
       <div class="section__inner">
@@ -511,8 +488,7 @@
 
     <!--
       LEARNING JOURNEY SECTION (id="journey").
-      This is for self-directed learning and personal projects. It is NOT a work history.
-      Do not add jobs or internships you have not had.
+      Self-directed learning and personal projects. NOT a work history.
       HOW TO ADD A MILESTONE: copy one li item, edit the date and text.
     -->
     <section class="section" id="journey" aria-labelledby="journey-title">
@@ -543,8 +519,7 @@
 
     <!--
       EDUCATION SECTION (id="education").
-      Fill in only true information. Status examples: Current, Completed, Planned.
-      HOW TO ADD ANOTHER ENTRY: copy the whole article and edit it.
+      Fill in only true information. HOW TO ADD ANOTHER ENTRY: copy the whole article.
     -->
     <section class="section" id="education" aria-labelledby="education-title">
       <div class="section__inner">
@@ -567,9 +542,6 @@
     <!--
       CERTIFICATIONS SECTION (id="certifications").
       Nothing is listed because no certificates have been confirmed.
-      HOW TO ADD ONE: delete the empty-state paragraph and add an article with class
-      certificate-card containing: name, issuing organisation, completion date, and
-      an a tag to the verification link (target _blank, rel="noopener noreferrer").
       Never list a certificate you have not earned.
     -->
     <section class="section" id="certifications" aria-labelledby="cert-title">
@@ -587,7 +559,6 @@
     <!--
       ACHIEVEMENTS SECTION (id="achievements").
       Add only real, verifiable milestones. No invented awards, ranks or numbers.
-      HOW TO ADD: delete the empty-state paragraph and add li items inside a ul with class achievement-list.
     -->
     <section class="section" id="achievements" aria-labelledby="achievements-title">
       <div class="section__inner">
@@ -603,10 +574,9 @@
 
     <!--
       CONTACT SECTION (id="contact").
-      There is no contact form because there is no backend. Use simple links instead.
-      The placeholder spans show that something must be replaced. HOW TO REPLACE:
-      change a span into an a tag. For email use a mailto address. For profiles use the
-      full web address and add target _blank with rel="noopener noreferrer".
+      No contact form because there is no backend. Use simple links instead.
+      HOW TO REPLACE: change a span into an a tag. For email use a mailto address.
+      For profiles use the full web address with target _blank and rel="noopener noreferrer".
     -->
     <section class="section" id="contact" aria-labelledby="contact-title">
       <div class="section__inner">
@@ -637,12 +607,11 @@
 
   <!--
     FOOTER. The span with id footer-year is filled with the current year by script.js.
-    The first line shows a fallback year in case JavaScript does not run: edit it yearly if you like.
   -->
   <footer class="site-footer" id="site-footer">
     <div class="site-footer__inner">
       <p class="site-footer__identity">
-        YOUR_NAME, aspiring Data Analyst. &copy; <span id="footer-year">2026</span>
+        Joseph Richer, aspiring Data Analyst. &copy; <span id="footer-year">2026</span>
       </p>
       <nav class="site-footer__nav" aria-label="Footer navigation">
         <a href="#projects">Projects</a>
