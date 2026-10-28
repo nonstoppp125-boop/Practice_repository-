@@ -1,13 +1,14 @@
 /* ==========================================================
    style.css  |  Futuristic Data Analyst Learning Portfolio
+   ORANGE THEME
    ----------------------------------------------------------
    HOW TO READ THIS FILE
    - A comment is any text between a slash-star and a star-slash.
    - Change colours and sizes ONLY in SECTION 1 (design tokens).
-   - Do not rename any selector (the text starting with a dot or
-     a hash) unless index.html and script.js are changed too.
+   - Do not rename any selector (text starting with a dot or a hash)
+     unless index.html and script.js are changed too.
 
-   STATE NAMES THAT script.js MUST USE
+   STATE NAMES THAT script.js USES
    - body: starts as "no-js", script.js changes it to "js-ready"
    - #scene-container: data-scene-state = loading, ready or error
    - #scene-container: class "is-lit" when the light is on
@@ -16,40 +17,39 @@
    - [data-reveal]: class "is-visible" once scrolled into view
    - .site-nav__link: class "is-active" for the current section
    - #nav-toggle: aria-expanded = true or false (opens mobile menu)
-   - #site-header: class "is-scrolled" (optional)
+   - #site-header: class "is-scrolled"
    ========================================================== */
 
 
 /* ==========================================================
    SECTION 1 - DESIGN TOKENS (safe to edit)
-   Change a value here and the whole site updates.
    ========================================================== */
 :root {
   /* Backgrounds and surfaces (darkest to lightest) */
-  --color-bg: #05080f;
-  --color-bg-soft: #080e1a;
-  --color-surface: #0c1424;
-  --color-surface-2: #121d33;
-  --color-surface-glass: rgba(12, 20, 36, 0.82);
+  --color-bg: #0a0705;
+  --color-bg-soft: #100b07;
+  --color-surface: #17100a;
+  --color-surface-2: #21170e;
+  --color-surface-glass: rgba(23, 16, 10, 0.84);
 
   /* Text */
-  --color-text: #e9f2fc;
-  --color-text-soft: #b7c7da;
-  --color-text-muted: #93a7bf;
+  --color-text: #fbf3ea;
+  --color-text-soft: #e2d0bb;
+  --color-text-muted: #b8a089;
 
-  /* Accents: primary cyan, secondary violet, warm lamp light */
-  --color-accent: #22d3ee;
-  --color-accent-strong: #67e8f9;
-  --color-accent-2: #8b7cff;
-  --color-light-warm: #ffcf70;
+  /* Accents: primary orange, secondary red-orange, lamp light */
+  --color-accent: #ff8a1f;
+  --color-accent-strong: #ffb347;
+  --color-accent-2: #ff5a36;
+  --color-light-warm: #ffe2a8;
 
   /* Borders */
-  --color-border: rgba(148, 190, 230, 0.16);
-  --color-border-strong: rgba(34, 211, 238, 0.45);
+  --color-border: rgba(255, 190, 130, 0.16);
+  --color-border-strong: rgba(255, 138, 31, 0.5);
 
   /* Status colours (text labels always accompany them) */
   --color-success: #4ade80;
-  --color-warning: #fbbf24;
+  --color-warning: #facc15;
   --color-error: #f87171;
 
   /* Typography: system fonts only, so nothing fails to load */
@@ -87,12 +87,12 @@
   --radius-pill: 999px;
 
   /* Shadows and glow (lower the glow numbers for a calmer look) */
-  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.4);
-  --shadow-lift: 0 18px 44px rgba(0, 0, 0, 0.5);
-  --glow-accent: 0 0 0 1px rgba(34, 211, 238, 0.35), 0 0 22px rgba(34, 211, 238, 0.22);
-  --glow-warm: 0 0 60px rgba(255, 207, 112, 0.28);
+  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --shadow-lift: 0 18px 44px rgba(0, 0, 0, 0.55);
+  --glow-accent: 0 0 0 1px rgba(255, 138, 31, 0.4), 0 0 22px rgba(255, 138, 31, 0.25);
+  --glow-warm: 0 0 60px rgba(255, 226, 168, 0.28);
 
-  /* Motion: set --motion-slow to 0s to calm down background movement */
+  /* Motion */
   --duration-fast: 160ms;
   --duration: 280ms;
   --duration-slow: 600ms;
@@ -120,7 +120,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-height) + 1rem);
   color-scheme: dark;
-  scrollbar-color: rgba(34, 211, 238, 0.45) var(--color-bg);
+  scrollbar-color: rgba(255, 138, 31, 0.5) var(--color-bg);
 }
 
 body {
@@ -164,7 +164,7 @@ button {
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.35);
+  background: rgba(255, 138, 31, 0.4);
   color: #ffffff;
 }
 
@@ -180,7 +180,7 @@ main:focus {
   background: var(--color-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(34, 211, 238, 0.35);
+  background: rgba(255, 138, 31, 0.45);
   border-radius: var(--radius-pill);
   border: 2px solid var(--color-bg);
 }
@@ -193,7 +193,7 @@ main:focus {
   z-index: var(--z-skip);
   padding: var(--space-3) var(--space-4);
   background: var(--color-accent);
-  color: #03121a;
+  color: #1a0d02;
   font-weight: 700;
   border-radius: var(--radius-sm);
   text-decoration: none;
@@ -203,7 +203,7 @@ main:focus {
   top: var(--space-3);
 }
 
-/* Visually hidden but readable by screen readers (available for future use) */
+/* Visually hidden but readable by screen readers (for future use) */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -256,7 +256,6 @@ h1, h2, h3 {
 
 /* ==========================================================
    SECTION 4 - BACKGROUND AND ATMOSPHERE
-   Decorative layers behind everything. Not clickable.
    ========================================================== */
 .bg-layers {
   position: fixed;
@@ -265,7 +264,7 @@ h1, h2, h3 {
   overflow: hidden;
   pointer-events: none;
   background:
-    radial-gradient(120% 80% at 50% -10%, #0b1730 0%, var(--color-bg) 60%);
+    radial-gradient(120% 80% at 50% -10%, #25150a 0%, var(--color-bg) 60%);
 }
 
 .bg-layer {
@@ -276,8 +275,8 @@ h1, h2, h3 {
 /* Faint grid that slowly drifts */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(34, 211, 238, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34, 211, 238, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(255, 138, 31, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 138, 31, 0.06) 1px, transparent 1px);
   background-size: 56px 56px;
   -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
   mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
@@ -287,12 +286,12 @@ h1, h2, h3 {
 /* Soft colour pools */
 .bg-glow {
   background:
-    radial-gradient(40% 35% at 85% 12%, rgba(139, 124, 255, 0.16), transparent 70%),
-    radial-gradient(45% 40% at 10% 40%, rgba(34, 211, 238, 0.12), transparent 70%);
+    radial-gradient(40% 35% at 85% 12%, rgba(255, 90, 54, 0.16), transparent 70%),
+    radial-gradient(45% 40% at 10% 40%, rgba(255, 138, 31, 0.12), transparent 70%);
   animation: glow-breathe 18s ease-in-out infinite alternate;
 }
 
-/* script.js may place a canvas or small elements in here */
+/* script.js may place a canvas in here */
 .bg-particles canvas {
   position: absolute;
   inset: 0;
@@ -320,20 +319,20 @@ h1, h2, h3 {
   position: sticky;
   top: 0;
   z-index: var(--z-header);
-  background: rgba(5, 8, 15, 0.9);
+  background: rgba(10, 7, 5, 0.92);
   border-bottom: 1px solid var(--color-border);
   transition: background var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
 }
 
 @supports (backdrop-filter: blur(10px)) {
   .site-header {
-    background: rgba(5, 8, 15, 0.72);
+    background: rgba(10, 7, 5, 0.74);
     backdrop-filter: blur(12px);
   }
 }
 
 .site-header.is-scrolled {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .site-header__inner {
@@ -365,7 +364,7 @@ h1, h2, h3 {
   height: 2.1rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border-strong);
-  background: rgba(34, 211, 238, 0.08);
+  background: rgba(255, 138, 31, 0.1);
   color: var(--color-accent-strong);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
@@ -503,14 +502,14 @@ h1, h2, h3 {
 
 .site-nav__link:hover {
   color: var(--color-text);
-  background: rgba(34, 211, 238, 0.08);
+  background: rgba(255, 138, 31, 0.1);
 }
 
-/* Current section. The bar on the left shows state without relying on colour alone. */
+/* Current section. The bar shows state without relying on colour alone. */
 .site-nav__link.is-active,
 .site-nav__link[aria-current="page"] {
   color: var(--color-accent-strong);
-  background: rgba(34, 211, 238, 0.1);
+  background: rgba(255, 138, 31, 0.12);
   font-weight: 700;
 }
 .site-nav__link.is-active::before,
@@ -593,14 +592,14 @@ h1, h2, h3 {
   height: 0.6rem;
   border-radius: 50%;
   background: var(--color-accent);
-  box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 0 0 rgba(255, 138, 31, 0.5);
   animation: hint-pulse 3.2s ease-out infinite;
 }
 
 @keyframes hint-pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.45); }
-  70%  { box-shadow: 0 0 0 0.7rem rgba(34, 211, 238, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(255, 138, 31, 0.45); }
+  70%  { box-shadow: 0 0 0 0.7rem rgba(255, 138, 31, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 138, 31, 0); }
 }
 
 .hero__scroll {
@@ -660,22 +659,22 @@ h1, h2, h3 {
 }
 
 .button--primary {
-  background: linear-gradient(135deg, var(--color-accent), #38bdf8);
-  color: #03121a;
+  background: linear-gradient(135deg, var(--color-accent), #ff6a00);
+  color: #1a0d02;
   box-shadow: var(--glow-accent);
 }
 .button--primary:hover {
-  background: linear-gradient(135deg, var(--color-accent-strong), #7dd3fc);
+  background: linear-gradient(135deg, var(--color-accent-strong), #ff8a1f);
   transform: translateY(-2px);
 }
 
 .button--secondary {
-  background: rgba(18, 29, 51, 0.7);
+  background: rgba(33, 23, 14, 0.75);
   border-color: var(--color-border-strong);
   color: var(--color-text);
 }
 .button--secondary:hover {
-  background: rgba(34, 211, 238, 0.12);
+  background: rgba(255, 138, 31, 0.14);
   transform: translateY(-2px);
 }
 
@@ -689,12 +688,12 @@ h1, h2, h3 {
   box-shadow: var(--glow-accent);
 }
 .button--glow[aria-pressed="true"] {
-  background: rgba(255, 207, 112, 0.14);
+  background: rgba(255, 226, 168, 0.16);
   border-color: var(--color-light-warm);
-  color: #fff3d6;
+  color: #fff6e0;
   box-shadow: var(--glow-warm);
 }
-/* A small bar-and-ring marker so on/off is not shown by colour alone */
+/* A small ring marker so on/off is not shown by colour alone */
 .button--glow::before {
   content: "";
   width: 0.65rem;
@@ -723,9 +722,9 @@ h1, h2, h3 {
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-lg);
   background:
-    radial-gradient(70% 60% at 50% 110%, rgba(34, 211, 238, 0.16), transparent 70%),
-    linear-gradient(180deg, #0a1426 0%, #060b16 100%);
-  box-shadow: var(--shadow-card), inset 0 0 60px rgba(34, 211, 238, 0.05);
+    radial-gradient(70% 60% at 50% 110%, rgba(255, 138, 31, 0.18), transparent 70%),
+    linear-gradient(180deg, #1b110a 0%, #0c0805 100%);
+  box-shadow: var(--shadow-card), inset 0 0 60px rgba(255, 138, 31, 0.05);
   transition: box-shadow var(--duration-slow) var(--ease), border-color var(--duration-slow) var(--ease);
 }
 
@@ -738,8 +737,8 @@ h1, h2, h3 {
   bottom: 0;
   height: 45%;
   background-image:
-    linear-gradient(rgba(34, 211, 238, 0.14) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34, 211, 238, 0.14) 1px, transparent 1px);
+    linear-gradient(rgba(255, 138, 31, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 138, 31, 0.16) 1px, transparent 1px);
   background-size: 40px 40px;
   transform: perspective(380px) rotateX(62deg);
   transform-origin: bottom;
@@ -753,13 +752,13 @@ h1, h2, h3 {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(50% 45% at 50% 18%, rgba(255, 207, 112, 0.22), transparent 75%);
+  background: radial-gradient(50% 45% at 50% 18%, rgba(255, 226, 168, 0.24), transparent 75%);
   opacity: 0;
   transition: opacity var(--duration-slow) var(--ease);
   pointer-events: none;
 }
 .scene.is-lit {
-  border-color: rgba(255, 207, 112, 0.55);
+  border-color: rgba(255, 226, 168, 0.6);
   box-shadow: var(--shadow-card), var(--glow-warm);
 }
 .scene.is-lit::after {
@@ -819,7 +818,7 @@ h1, h2, h3 {
   height: 0.75rem;
   margin-right: var(--space-2);
   vertical-align: -0.1em;
-  border: 2px solid rgba(34, 211, 238, 0.3);
+  border: 2px solid rgba(255, 138, 31, 0.3);
   border-top-color: var(--color-accent-strong);
   border-radius: 50%;
   animation: spin 0.9s linear infinite;
@@ -853,7 +852,7 @@ h1, h2, h3 {
   gap: var(--space-2);
   padding: var(--space-5);
   text-align: center;
-  background: linear-gradient(180deg, rgba(10, 20, 38, 0.92), rgba(6, 11, 22, 0.96));
+  background: linear-gradient(180deg, rgba(27, 17, 10, 0.93), rgba(12, 8, 5, 0.97));
 }
 .scene__fallback-title {
   font-size: var(--text-lg);
@@ -915,7 +914,7 @@ h1, h2, h3 {
   padding: var(--space-2) var(--space-4);
   text-align: left;
   font-size: var(--text-sm);
-  background: rgba(18, 29, 51, 0.6);
+  background: rgba(33, 23, 14, 0.65);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -926,7 +925,7 @@ h1, h2, h3 {
 }
 .scene-objects__button:hover {
   border-color: var(--color-border-strong);
-  background: rgba(34, 211, 238, 0.1);
+  background: rgba(255, 138, 31, 0.12);
 }
 .scene-objects__button:active {
   transform: scale(0.99);
@@ -936,7 +935,7 @@ h1, h2, h3 {
 .scene-objects__button.is-selected,
 .scene-objects__button[aria-pressed="true"] {
   border-color: var(--color-accent);
-  background: rgba(34, 211, 238, 0.14);
+  background: rgba(255, 138, 31, 0.16);
   box-shadow: inset 4px 0 0 var(--color-accent);
   font-weight: 700;
 }
@@ -953,7 +952,7 @@ h1, h2, h3 {
   gap: var(--space-2);
   padding: var(--space-3) var(--space-4);
   border-left: 3px solid var(--color-accent);
-  background: rgba(34, 211, 238, 0.06);
+  background: rgba(255, 138, 31, 0.07);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 .scene-description__text {
@@ -1001,7 +1000,7 @@ h1, h2, h3 {
   align-content: start;
   min-width: 0;
   padding: var(--space-5);
-  background: linear-gradient(160deg, rgba(18, 29, 51, 0.88), rgba(12, 20, 36, 0.88));
+  background: linear-gradient(160deg, rgba(33, 23, 14, 0.9), rgba(23, 16, 10, 0.9));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
@@ -1019,7 +1018,7 @@ h1, h2, h3 {
   left: var(--space-5);
   right: var(--space-5);
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(103, 232, 249, 0.55), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 179, 71, 0.6), transparent);
   pointer-events: none;
 }
 
@@ -1072,7 +1071,7 @@ h1, h2, h3 {
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-3);
-  background: rgba(5, 8, 15, 0.5);
+  background: rgba(10, 7, 5, 0.55);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
 }
@@ -1195,7 +1194,7 @@ h1, h2, h3 {
 .status-badge[data-status="placeholder"] {
   border-style: dashed;
   border-color: var(--color-warning);
-  color: #ffe9a6;
+  color: #fff0a8;
 }
 .status-badge[data-status="placeholder"]::before {
   background: var(--color-warning);
@@ -1242,14 +1241,14 @@ h1, h2, h3 {
   padding: var(--space-1) var(--space-3);
   border: 1px dashed var(--color-warning);
   border-radius: var(--radius-sm);
-  color: #ffe9a6;
+  color: #fff0a8;
   font-size: var(--text-sm);
   overflow-wrap: anywhere;
 }
 
 .site-footer {
   border-top: 1px solid var(--color-border);
-  background: rgba(5, 8, 15, 0.85);
+  background: rgba(10, 7, 5, 0.88);
   padding: var(--space-7) var(--space-4) var(--space-6);
 }
 .site-footer__inner {
@@ -1288,7 +1287,7 @@ h1, h2, h3 {
   transition: background var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
 }
 .back-to-top:hover {
-  background: rgba(34, 211, 238, 0.12);
+  background: rgba(255, 138, 31, 0.14);
   transform: translateY(-2px);
 }
 
@@ -1312,8 +1311,7 @@ h1, h2, h3 {
   transform: none;
 }
 
-/* Reveal must not fight the card hover lift, so once visible
-   the card transition list is restored. */
+/* Once visible, restore the card hover transitions */
 .js-ready .card[data-reveal].is-visible {
   transition:
     opacity var(--duration-slow) var(--ease),
@@ -1331,8 +1329,6 @@ h1, h2, h3 {
 
 /* ==========================================================
    SECTION 11 - RESPONSIVE LAYOUTS
-   The rules above are for small phones. These add layout as the
-   screen grows. em values follow the user's font size.
    40em = about 640px, 62em = about 992px, 80em = about 1280px.
    ========================================================== */
 @media (min-width: 40em) {
