@@ -1,20 +1,22 @@
 /* ==========================================================
    script.js  |  Futuristic Data Analyst Learning Portfolio
-   ORANGE THEME
+   ORANGE THEME, STRETCHY BOXES, RGB PAUSING, ROPE LIGHT, 3D DESK
    ----------------------------------------------------------
    WHAT THIS FILE DOES
    1. Mobile menu, active menu link, footer year, scroll reveal.
-   2. Loads Three.js and builds a 3D desk scene in code.
-   3. Lets visitors click or tap 3D objects, and use real HTML
-      buttons that do exactly the same things.
-   4. Moves the camera a little as the page scrolls.
+   2. Stretchy boxes: press and drag any card, button or heading and it
+      stretches like rubber, then springs back.
+   3. Pauses the RGB border animation on things that are off screen.
+   4. The HTML rope light switch (drag down or tap).
+   5. Loads Three.js and builds a 3D desk scene in code, with many
+      objects you can tap, and a lamp with a pull rope.
+   6. Moves the 3D camera a little as the page scrolls.
 
    BEGINNER NOTES
    - Settings you can safely change are in the CONFIG block.
    - Everything is wrapped in one function so it does not clash
      with anything else on the page.
-   - If something is missing from the HTML, that feature is
-     skipped. Nothing here should break the rest of the page.
+   - If something is missing from the HTML, that feature is skipped.
    - Lines starting with two slashes are comments.
    ========================================================== */
 (function () {
@@ -31,32 +33,53 @@
      SECTION 1 - CONFIG (safe to edit)
      ======================================================== */
   var CONFIG = {
-    // Used only if #scene-container has no data-three-url attribute.
     threeUrlFallback: 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js',
-    loadTimeoutMs: 15000,          // give up on the library after this long
+    loadTimeoutMs: 15000,
 
-    maxPixelRatio: 2,              // sharpness limit on desktop
-    maxPixelRatioSmall: 1.5,       // lower on phones to stay smooth
+    maxPixelRatio: 2,
+    maxPixelRatioSmall: 1.5,
 
-    particleCount: 110,            // floating dots (desktop)
-    particleCountSmall: 45,        // floating dots (phones)
+    particleCount: 110,
+    particleCountSmall: 45,
 
-    parallaxStrength: 0.55,        // how much the camera follows the mouse
-    scrollStrength: 1,             // how much the camera moves while scrolling (0 = off)
-    idleSway: 0.1,                 // slow camera drift when mouse is not used
-    floatAmount: 0.06,             // how far floating cards bob up and down
+    parallaxStrength: 0.6,         // camera follows the mouse
+    scrollStrength: 1,             // camera moves while scrolling (0 = off)
+    idleSway: 0.1,
+    floatAmount: 0.06,
 
-    lampIntensity: 14,             // brightness of the lamp when switched on
-    tapMovePx: 10,                 // finger/mouse may move this far and still count as a tap
-    tapMaxMs: 700,                 // longest press that still counts as a tap
+    lampIntensity: 16,
+    tapMovePx: 10,
+    tapMaxMs: 700,
 
-    camera: { x: 0, y: 2.5, z: 7.4 },     // where the camera sits
-    lookAt: { x: 0, y: 1.7, z: 0 },       // where the camera looks
+    camera: { x: 0, y: 2.8, z: 9.2 },
+    lookAt: { x: 0, y: 1.8, z: 0 },
+
+    // Stretchy boxes
+    stretchHoldMs: 160,            // touch: hold this long before stretching starts
+    stretchStrength: 0.5,          // how stretchy (0 = off, 1 = very stretchy)
+    stretchMaxScale: 1.18,
+    stretchMaxMove: 24,            // pixels
 
     smallScreenQuery: '(max-width: 40em)',
     desktopNavQuery: '(min-width: 62em)',
-    debugParam: 'debug'            // add ?debug=1 to the web address to list unfilled placeholders
+    debugParam: 'debug'
   };
+
+  /* Elements that can be pressed and stretched. Keep in step with style.css. */
+  var STRETCH_SELECTOR = [
+    '.card', '.button', '.scene-objects__button', '.skill-list__item',
+    '.status-badge', '.link-placeholder', '.back-to-top', '.brand',
+    '.nav-toggle', '.scene-description', '.hero__title', '.hero__lead',
+    '.hero__eyebrow', '.section__title', '.section__intro', '.site-footer__identity'
+  ].join(',');
+
+  /* Elements that have the rainbow ring. Keep in step with style.css Section 3B. */
+  var RGB_SELECTOR = [
+    '.card', '.scene', '.scene-controls', '.scene-objects__button',
+    '.scene-description', '.skill-list__item', '.status-badge',
+    '.link-placeholder', '.nav-toggle', '.brand__mark', '.back-to-top',
+    '.button', '.light-rope'
+  ].join(',');
 
 
   /* ========================================================
@@ -72,7 +95,6 @@
     return Math.min(max, Math.max(min, value));
   }
 
-  // matchMedia wrapper that never crashes in odd browsers
   function media(query) {
     return window.matchMedia ? window.matchMedia(query) : { matches: false, addEventListener: function () {} };
   }
@@ -88,16 +110,14 @@
   var reducedMotion = reducedMotionQuery.matches;
   onMediaChange(reducedMotionQuery, function () {
     reducedMotion = reducedMotionQuery.matches;
-    if (sceneApi) {
-      sceneApi.setReducedMotion(reducedMotion);
-    }
+    if (sceneApi) { sceneApi.setReducedMotion(reducedMotion); }
   });
 
   var sceneApi = null; // filled in when the 3D scene is running
 
 
   /* ========================================================
-     SECTION 3 - PAGE STATE (no-js -> js-ready)
+     SECTION 3 - PAGE STATE
      ======================================================== */
   function markJsReady() {
     document.body.classList.remove('no-js');
@@ -107,7 +127,6 @@
 
   /* ========================================================
      SECTION 4 - MOBILE NAVIGATION
-     Needs: #nav-toggle (button) and #site-nav.
      ======================================================== */
   function initMobileNav() {
     var toggle = $('#nav-toggle');
@@ -124,17 +143,13 @@
       nav.classList.toggle('is-open', open);
     }
 
-    toggle.addEventListener('click', function () {
-      setOpen(!isOpen());
-    });
+    toggle.addEventListener('click', function () { setOpen(!isOpen()); });
 
-    // Choosing a link closes the menu
     nav.addEventListener('click', function (event) {
       var link = event.target.closest ? event.target.closest('a') : null;
       if (link) { setOpen(false); }
     });
 
-    // Escape closes the menu and returns focus to the button
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape' && isOpen()) {
         setOpen(false);
@@ -142,14 +157,12 @@
       }
     });
 
-    // Clicking or tapping outside closes it
     document.addEventListener('click', function (event) {
       if (!isOpen()) { return; }
       if (nav.contains(event.target) || toggle.contains(event.target)) { return; }
       setOpen(false);
     });
 
-    // Switching to the wide layout resets the menu
     onMediaChange(desktopQuery, function () {
       if (desktopQuery.matches) { setOpen(false); }
     });
@@ -182,14 +195,12 @@
       }
       if (!items.length) { return; }
 
-      // The "current" section is the last one whose top is above 35% of the screen
       var line = (header ? header.offsetHeight : 0) + window.innerHeight * 0.35;
       var current = items[0];
       items.forEach(function (item) {
         if (item.section.getBoundingClientRect().top <= line) { current = item; }
       });
 
-      // At the very bottom, highlight the last section
       var atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
       if (atBottom) { current = items[items.length - 1]; }
 
@@ -225,7 +236,6 @@
     if (el) { el.textContent = String(new Date().getFullYear()); }
   }
 
-  // Links that open a new tab get safe rel values
   function secureExternalLinks() {
     $all('a[target="_blank"]').forEach(function (a) {
       var rel = (a.getAttribute('rel') || '').split(/\s+/).filter(Boolean);
@@ -236,7 +246,6 @@
     });
   }
 
-  // After back-to-top is used, move keyboard focus to the top
   function initBackToTop() {
     var link = $('#back-to-top');
     var home = $('#home');
@@ -250,7 +259,6 @@
 
   /* ========================================================
      SECTION 7 - SCROLL REVEAL
-     Elements with data-reveal get is-visible when they appear.
      ======================================================== */
   function initReveal() {
     var items = $all('[data-reveal]');
@@ -275,9 +283,146 @@
 
 
   /* ========================================================
-     SECTION 8 - OPTIONAL DEBUG MODE
-     Open the site with ?debug=1 on the end of the address and
-     the browser console lists text that still needs replacing.
+     SECTION 8 - RGB RING PAUSING
+     The rainbow border only animates while it is on screen.
+     Each element also gets a different starting angle so they do
+     not all look the same.
+     ======================================================== */
+  function initRgbPause() {
+    var items = $all(RGB_SELECTOR);
+    if (!items.length) { return; }
+
+    items.forEach(function (el) {
+      el.style.animationDelay = (-Math.random() * 7).toFixed(2) + 's';
+    });
+
+    if (!('IntersectionObserver' in window)) { return; }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        entry.target.classList.toggle('is-rgb-paused', !entry.isIntersecting);
+      });
+    }, { rootMargin: '80px' });
+
+    items.forEach(function (el) { observer.observe(el); });
+  }
+
+
+  /* ========================================================
+     SECTION 9 - STRETCHY BOXES
+     Press any element in STRETCH_SELECTOR and drag: it stretches
+     like rubber. Let go and it springs back (the spring is in
+     style.css as .is-stretch-release).
+
+     Mouse: starts at once.
+     Touch: starts after a short hold (stretchHoldMs). If the finger
+     moves before that, it is a normal page scroll and nothing stretches.
+     Only the CSS properties "translate" and "scale" are used, so they
+     never fight with the hover lift or the reveal animation.
+     ======================================================== */
+  var suppressClickUntil = 0;
+
+  function initStretch() {
+    if (!('PointerEvent' in window) || CONFIG.stretchStrength <= 0) { return; }
+
+    var active = null;
+
+    function release(state) {
+      if (!state) { return; }
+      window.clearTimeout(state.timer);
+      var el = state.el;
+      el.classList.remove('is-stretching');
+      el.classList.add('is-stretch-release');
+      el.style.translate = '';
+      el.style.scale = '';
+      window.setTimeout(function () { el.classList.remove('is-stretch-release'); }, 750);
+      if (state.dragged) { suppressClickUntil = performance.now() + 350; }
+    }
+
+    function apply(state, dx, dy) {
+      var rect = state.rect;
+      var ax = Math.min(Math.abs(dx) / Math.max(rect.width, 60), 0.5);
+      var ay = Math.min(Math.abs(dy) / Math.max(rect.height, 40), 0.5);
+      var k = CONFIG.stretchStrength;
+      var sx = clamp(1 + ax * k - ay * k * 0.15, 0.9, CONFIG.stretchMaxScale);
+      var sy = clamp(1 + ay * k - ax * k * 0.15, 0.9, CONFIG.stretchMaxScale);
+      var mx = clamp(dx * 0.3, -CONFIG.stretchMaxMove, CONFIG.stretchMaxMove);
+      var my = clamp(dy * 0.3, -CONFIG.stretchMaxMove, CONFIG.stretchMaxMove);
+      state.el.style.translate = mx.toFixed(1) + 'px ' + my.toFixed(1) + 'px';
+      state.el.style.scale = sx.toFixed(3) + ' ' + sy.toFixed(3);
+    }
+
+    document.addEventListener('pointerdown', function (event) {
+      if (reducedMotion || active) { return; }
+      if (event.pointerType === 'mouse' && event.button !== 0) { return; }
+      var el = event.target.closest ? event.target.closest(STRETCH_SELECTOR) : null;
+      if (!el || el.disabled) { return; }
+
+      var state = {
+        el: el,
+        id: event.pointerId,
+        x: event.clientX,
+        y: event.clientY,
+        rect: el.getBoundingClientRect(),
+        touch: event.pointerType === 'touch',
+        on: event.pointerType !== 'touch',
+        dragged: false,
+        timer: null
+      };
+      active = state;
+
+      el.classList.remove('is-stretch-release');
+      el.classList.add('is-stretching');
+      el.style.scale = '0.97';                       // small press squish
+
+      if (state.touch) {
+        state.timer = window.setTimeout(function () { state.on = true; }, CONFIG.stretchHoldMs);
+      }
+    });
+
+    document.addEventListener('pointermove', function (event) {
+      if (!active || active.id !== event.pointerId) { return; }
+      var dx = event.clientX - active.x;
+      var dy = event.clientY - active.y;
+      var dist = Math.hypot(dx, dy);
+
+      if (!active.on) {
+        // Touch moved before the hold finished: this is a scroll, cancel
+        if (dist > 8) { release(active); active = null; }
+        return;
+      }
+      if (dist > 8) { active.dragged = true; }
+      apply(active, dx, dy);
+    });
+
+    function end(event) {
+      if (!active || active.id !== event.pointerId) { return; }
+      release(active);
+      active = null;
+    }
+    document.addEventListener('pointerup', end);
+    document.addEventListener('pointercancel', end);
+
+    // While a touch stretch is active, stop the page from scrolling.
+    // This listener only blocks scrolling during an active stretch.
+    document.addEventListener('touchmove', function (event) {
+      if (active && active.touch && active.on && event.cancelable) {
+        event.preventDefault();
+      }
+    }, { passive: false });
+
+    // After dragging, ignore the click that the browser sends on release
+    document.addEventListener('click', function (event) {
+      if (performance.now() < suppressClickUntil) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, true);
+  }
+
+
+  /* ========================================================
+     SECTION 10 - OPTIONAL DEBUG MODE
      ======================================================== */
   function runDebugReport() {
     var params;
@@ -293,62 +438,79 @@
 
 
   /* ========================================================
-     SECTION 9 - OBJECT REGISTRY (3D objects and their meaning)
+     SECTION 11 - OBJECT REGISTRY (3D objects and their meaning)
      ----------------------------------------------------------
      HOW TO ADD A NEW INTERACTIVE OBJECT
-     1. Add an entry below with a unique id.
-        action 'section' needs a target such as '#projects'.
-     2. In createScene (Section 12) create the 3D shape and call
+     1. Add an entry below with a unique id. Give it a target like
+        '#projects' to link to a section, or leave target out for
+        a decoration that only shows a description.
+     2. In createScene (Section 14) build the 3D shape and call
         register('your-id', group).
      3. In index.html add a button with data-scene-object="your-id"
-        and data-target="#section".
+        (and data-target if it has one).
      ======================================================== */
   var OBJECTS = {
     'cord': {
-      label: 'Pull cord',
       action: 'toggle-light',
-      description: 'Pull cord: switches the desk lamp on and off. This is the same as the Pull the cord button.'
+      description: 'Pull rope: switches the desk lamp on and off. It does the same as the rope control in the panel.'
     },
     'monitor': {
-      label: 'Monitor',
-      action: 'section',
-      target: '#projects',
-      linkText: 'Go to Projects',
-      description: 'Monitor: stands for the Projects section. The chart on its screen is a decorative sample, not a real result.'
+      target: '#projects', linkText: 'Go to Projects',
+      description: 'Monitor: stands for the Projects section. The chart on the screen is a decorative sample, not a real result.'
     },
     'data-cards': {
-      label: 'Floating data cards',
-      action: 'section',
-      target: '#skills',
-      linkText: 'Go to Skills',
-      description: 'Floating data cards: stand for the Skills section. The graphics are abstract and do not show measurements.'
+      target: '#skills', linkText: 'Go to Skills',
+      description: 'Floating data cards: stand for the Skills section. The graphics are abstract and show no measurements.'
     },
     'notebook': {
-      label: 'Notebook',
-      action: 'section',
-      target: '#case-studies',
-      linkText: 'Go to Case Studies',
+      target: '#case-studies', linkText: 'Go to Case Studies',
       description: 'Notebook: stands for the Case Studies section, where written analyses will appear once they exist.'
     },
     'chart-cube': {
-      label: 'Chart cube',
-      action: 'section',
-      target: '#about',
-      linkText: 'Go to About',
+      target: '#about', linkText: 'Go to About',
       description: 'Chart cube: stands for the About section and the purpose of this portfolio.'
+    },
+    'books': {
+      target: '#journey', linkText: 'Go to Learning Journey',
+      description: 'Stack of books: stands for the Learning Journey section, where self-directed learning milestones are recorded.'
+    },
+    'grad-cap': {
+      target: '#education', linkText: 'Go to Education',
+      description: 'Graduation cap: stands for the Education section.'
+    },
+    'certificate': {
+      target: '#certifications', linkText: 'Go to Certifications',
+      description: 'Framed certificate: stands for the Certifications section. The frame is an empty placeholder and no certificate is claimed.'
+    },
+    'trophy': {
+      target: '#achievements', linkText: 'Go to Achievements',
+      description: 'Trophy: stands for the Achievements section. No achievements are listed yet, so it is only a symbol.'
+    },
+    'mail': {
+      target: '#contact', linkText: 'Go to Contact',
+      description: 'Envelope: stands for the Contact section.'
+    },
+    'database': {
+      description: 'Database stack: a decorative symbol for SQL and data storage. It does not link to a section.'
+    },
+    'mug': {
+      description: 'Coffee mug: decoration that makes the workspace feel lived in.'
+    },
+    'plant': {
+      description: 'Plant: decoration for the desk.'
     }
   };
 
-  // Current UI state (shared by 3D clicks and HTML buttons)
   var selectedId = null;
   var lightOn = false;
   var sceneReady = false;
   var defaultDescription = '';
+  var suppressRopeClick = false;
 
 
   /* ========================================================
-     SECTION 10 - SCENE UI (HTML side of the scene)
-     Everything here works with or without the 3D canvas.
+     SECTION 12 - SCENE UI (HTML side of the scene)
+     Works with or without the 3D canvas.
      ======================================================== */
   function sceneContainer() { return $('#scene-container'); }
 
@@ -387,19 +549,18 @@
   }
 
   function updateLightUi() {
-    var button = $('#light-toggle');
+    var rope = $('#light-toggle');
     var container = sceneContainer();
     if (container) { container.classList.toggle('is-lit', lightOn); }
-    if (button) {
-      button.setAttribute('aria-pressed', lightOn ? 'true' : 'false');
-      var label = $('.button__label', button);
+    if (rope) {
+      rope.setAttribute('aria-pressed', lightOn ? 'true' : 'false');
+      var label = $('.button__label', rope);
       if (label) {
         label.textContent = lightOn ? 'Pull the cord: light is on' : 'Pull the cord: light is off';
       }
     }
   }
 
-  // Disable a control and say why (never leave a fake working button)
   function disableControl(selector, text) {
     var control = $(selector);
     if (!control) { return; }
@@ -422,6 +583,14 @@
     target.setAttribute('tabindex', '-1');
     target.focus({ preventScroll: true });
     try { window.history.replaceState(null, '', selector); } catch (e) { /* not important */ }
+  }
+
+  // Small spring on the HTML rope when the light is switched by any means
+  function nudgeRope() {
+    var rope = $('#light-toggle');
+    if (!rope || reducedMotion) { return; }
+    rope.style.setProperty('--pull', '22px');
+    window.setTimeout(function () { rope.style.setProperty('--pull', '0px'); }, 140);
   }
 
   function setLight(on) {
@@ -448,7 +617,7 @@
   }
 
   /* One entry point for every activation, from the 3D canvas
-     or from an HTML button. This keeps both in step. */
+     or from an HTML control. This keeps both in step. */
   function activateObject(id) {
     var def = OBJECTS[id];
     if (!def) { return; }
@@ -457,6 +626,7 @@
       if (!sceneReady) { return; }
       setLight(!lightOn);
       showDescription(def.description, null);
+      nudgeRope();
       if (sceneApi) { sceneApi.pullCord(); }
       return;
     }
@@ -469,7 +639,6 @@
     selectObject(id);
   }
 
-  // One delegated click listener for all scene controls
   function initSceneControls() {
     var description = $('.scene-description__text');
     defaultDescription = description ? description.textContent : '';
@@ -485,6 +654,7 @@
       if (actionEl && !actionEl.disabled) {
         var action = actionEl.getAttribute('data-scene-action');
         if (action === 'toggle-light') {
+          if (suppressRopeClick) { return; }    // a drag already switched it
           activateObject('cord');
         } else if (action === 'reset-view') {
           resetView();
@@ -498,15 +668,49 @@
       }
     });
 
-    // Until the 3D scene is ready, the two scene-only buttons stay disabled
     disableControl('#light-toggle', 'Light control loading...');
     disableControl('#scene-reset');
   }
 
+  /* The HTML rope: drag it down (16px or more) to switch the light.
+     A plain tap or key press is handled by the click listener above. */
+  function initRopeDrag() {
+    var rope = $('#light-toggle');
+    if (!rope || !('PointerEvent' in window)) { return; }
+    var drag = null;
+
+    rope.addEventListener('pointerdown', function (event) {
+      if (rope.disabled) { return; }
+      drag = { id: event.pointerId, y: event.clientY, pull: 0 };
+      rope.classList.add('is-pulling');
+      try { rope.setPointerCapture(event.pointerId); } catch (e) { /* not important */ }
+    });
+
+    rope.addEventListener('pointermove', function (event) {
+      if (!drag || drag.id !== event.pointerId) { return; }
+      drag.pull = clamp(event.clientY - drag.y, 0, 48);
+      rope.style.setProperty('--pull', drag.pull + 'px');
+    });
+
+    function finish(event, allowSwitch) {
+      if (!drag || drag.id !== event.pointerId) { return; }
+      var pulled = drag.pull;
+      drag = null;
+      rope.classList.remove('is-pulling');
+      rope.style.setProperty('--pull', '0px');
+      if (allowSwitch && pulled >= 16) {
+        suppressRopeClick = true;
+        activateObject('cord');
+        window.setTimeout(function () { suppressRopeClick = false; }, 400);
+      }
+    }
+    rope.addEventListener('pointerup', function (event) { finish(event, true); });
+    rope.addEventListener('pointercancel', function (event) { finish(event, false); });
+  }
+
 
   /* ========================================================
-     SECTION 11 - THREE.JS LOADING AND WEBGL CHECK
-     Three.js is loaded once, from the CDN, only when WebGL works.
+     SECTION 13 - THREE.JS LOADING AND WEBGL CHECK
      Only ONE attempt is made. No retry loop.
      ======================================================== */
   function webglAvailable() {
@@ -579,14 +783,13 @@
 
 
   /* ========================================================
-     SECTION 12 - THE 3D SCENE
+     SECTION 14 - THE 3D SCENE
      createScene builds the renderer, camera, lights and objects,
      then returns a small API used by the HTML side above.
-     Colours here are hex numbers like 0xff8a1f (orange).
+     Colours are hex numbers like 0xff8a1f (orange).
      ======================================================== */
   function createScene(T, container, mount) {
 
-    /* ---- housekeeping: listeners are tracked so destroy() can remove them ---- */
     var listeners = [];
     function listen(target, type, handler, options) {
       target.addEventListener(type, handler, options);
@@ -599,7 +802,7 @@
     /* ---- renderer ---- */
     var renderer = new T.WebGLRenderer({
       antialias: !smallScreen,
-      alpha: true,                       // transparent, so the CSS background shows through
+      alpha: true,
       powerPreference: 'low-power'
     });
     renderer.setClearColor(0x000000, 0);
@@ -608,7 +811,6 @@
     var canvas = renderer.domElement;
     mount.appendChild(canvas);
 
-    /* ---- scene, camera ---- */
     var scene = new T.Scene();
     var camera = new T.PerspectiveCamera(40, 4 / 3, 0.1, 60);
     var raycaster = new T.Raycaster();
@@ -620,14 +822,15 @@
     var key = new T.DirectionalLight(0xffd2a8, 0.9);
     key.position.set(3, 5, 4);
     scene.add(key);
-    var lampLight = new T.PointLight(0xffe0b0, 0, 0, 2);   // the lamp: off until switched on
+    var lampLight = new T.PointLight(0xffe0b0, 0, 0, 2);
     scene.add(lampLight);
 
-    /* ---- shared bookkeeping ---- */
-    var disposables = [];            // textures made here, disposed on destroy
-    var hitMeshes = [];              // only these can be clicked
-    var entries = {};                // id -> { targets, mats, level, focus }
-    var floaters = [];               // objects that bob gently
+    /* ---- bookkeeping ---- */
+    var disposables = [];
+    var hitMeshes = [];
+    var entries = {};
+    var floaters = [];
+    var rgbMaterials = [];            // line materials whose colour cycles through the rainbow
     var changed = false;
 
     function register(id, root, scaleTargets, focusPoint) {
@@ -661,7 +864,31 @@
       return t;
     }
 
-    /* ---- decorative textures (abstract shapes, NOT real data) ---- */
+    function stdMat(color, emissive, emissiveIntensity, rough, metal) {
+      return new T.MeshStandardMaterial({
+        color: color,
+        emissive: emissive || 0x000000,
+        emissiveIntensity: emissiveIntensity || 0,
+        roughness: rough === undefined ? 0.6 : rough,
+        metalness: metal === undefined ? 0.2 : metal
+      });
+    }
+
+    // Shortcut: make a mesh, place it, add it to a parent
+    function part(parent, geometry, material, x, y, z) {
+      var mesh = new T.Mesh(geometry, material);
+      mesh.position.set(x || 0, y || 0, z || 0);
+      parent.add(mesh);
+      return mesh;
+    }
+
+    function rgbLine(geometry, offset, opacity) {
+      var mat = new T.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: opacity || 1 });
+      rgbMaterials.push({ mat: mat, offset: offset });
+      return new T.LineSegments(geometry, mat);
+    }
+
+    /* ---- decorative textures (abstract, NOT real data) ---- */
     function drawScreen(ctx, w, h) {
       ctx.fillStyle = '#120b06'; ctx.fillRect(0, 0, w, h);
       ctx.fillStyle = '#26160a'; ctx.fillRect(0, 0, w, 34);
@@ -714,101 +941,197 @@
       };
     }
 
-    function stdMat(color, emissive, emissiveIntensity, rough, metal) {
-      return new T.MeshStandardMaterial({
-        color: color,
-        emissive: emissive || 0x000000,
-        emissiveIntensity: emissiveIntensity || 0,
-        roughness: rough === undefined ? 0.6 : rough,
-        metalness: metal === undefined ? 0.2 : metal
-      });
+    // Empty certificate frame: clearly a placeholder, claims nothing
+    function drawCertificate(ctx, w, h) {
+      ctx.fillStyle = '#f3e6d3'; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = '#b5651d'; ctx.lineWidth = 6; ctx.strokeRect(8, 8, w - 16, h - 16);
+      ctx.fillStyle = '#6b3a1a'; ctx.font = 'bold 20px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('CERTIFICATE', w / 2, 54);
+      ctx.font = '15px sans-serif';
+      ctx.fillText('(empty placeholder)', w / 2, 84);
+      ctx.fillStyle = 'rgba(107,58,26,0.35)';
+      ctx.fillRect(40, 110, w - 80, 4); ctx.fillRect(60, 130, w - 120, 4);
+    }
+
+    function drawEnvelope(ctx, w, h) {
+      ctx.fillStyle = '#f6ead8'; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = '#b5651d'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(w / 2, h * 0.58); ctx.lineTo(w, 0); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, h); ctx.lineTo(w * 0.38, h * 0.5); ctx.moveTo(w, h); ctx.lineTo(w * 0.62, h * 0.5); ctx.stroke();
+      ctx.fillStyle = '#ff8a1f'; ctx.beginPath(); ctx.arc(w / 2, h * 0.58, 14, 0, Math.PI * 2); ctx.fill();
+    }
+
+    function drawGlow(ctx, w, h) {
+      var g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+      g.addColorStop(0, 'rgba(255,240,200,1)');
+      g.addColorStop(0.35, 'rgba(255,200,120,0.55)');
+      g.addColorStop(1, 'rgba(255,160,60,0)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
     }
 
     /* ======================================================
        BUILD THE WORKSPACE
        Units are arbitrary. The desk top surface is at y = 1.07.
+       Left to right on the desk: plant, certificate, books and cap,
+       notebook, monitor, envelope, mug, cube, trophy, database.
        ====================================================== */
     var DESK_TOP = 1.07;
 
-    // --- Desk (not clickable) ---
+    // --- Desk (decoration, not clickable) ---
     var desk = new T.Group();
-    var deskTop = new T.Mesh(new T.BoxGeometry(4.6, 0.14, 2.0), stdMat(0x2e2014, 0x000000, 0, 0.55, 0.25));
+    var deskTop = new T.Mesh(new T.BoxGeometry(6.4, 0.14, 2.2), stdMat(0x2e2014, 0x000000, 0, 0.55, 0.25));
     deskTop.position.y = 1.0;
     desk.add(deskTop);
     var legGeo = new T.BoxGeometry(0.12, 1.0, 0.12);
     var legMat = stdMat(0x221810, 0x000000, 0, 0.7, 0.3);
-    [[-2.15, 0.5, -0.9], [2.15, 0.5, -0.9], [-2.15, 0.5, 0.9], [2.15, 0.5, 0.9]].forEach(function (p) {
-      var leg = new T.Mesh(legGeo, legMat);
-      leg.position.set(p[0], p[1], p[2]);
-      desk.add(leg);
+    [[-3.0, 0.5, -0.95], [3.0, 0.5, -0.95], [-3.0, 0.5, 0.95], [3.0, 0.5, 0.95]].forEach(function (p) {
+      part(desk, legGeo, legMat, p[0], p[1], p[2]);
     });
-    var edge = new T.LineSegments(
-      new T.EdgesGeometry(new T.BoxGeometry(4.6, 0.14, 2.0)),
-      new T.LineBasicMaterial({ color: 0xff8a1f, transparent: true, opacity: 0.5 })
-    );
-    edge.position.y = 1.0;
-    desk.add(edge);
+    var deskEdge = rgbLine(new T.EdgesGeometry(new T.BoxGeometry(6.4, 0.14, 2.2)), 0, 0.7);
+    deskEdge.position.y = 1.0;
+    desk.add(deskEdge);
     scene.add(desk);
 
     // --- Monitor (id: monitor) ---
     var monitor = new T.Group();
     var monMat = stdMat(0x1c140d, 0x3a1d05, 0.2, 0.4, 0.5);
-    var base = new T.Mesh(new T.CylinderGeometry(0.35, 0.4, 0.04, 28), monMat);
-    base.position.y = 0.02;
-    var neck = new T.Mesh(new T.BoxGeometry(0.1, 0.5, 0.08), monMat);
-    neck.position.y = 0.27;
-    var bezel = new T.Mesh(new T.BoxGeometry(1.9, 1.1, 0.07), monMat);
-    bezel.position.y = 1.05;
-    var screenTex = makeTexture(512, 300, drawScreen);
-    var screen = new T.Mesh(new T.PlaneGeometry(1.76, 0.96),
-      new T.MeshBasicMaterial({ map: screenTex }));
-    screen.position.set(0, 1.05, 0.04);
-    monitor.add(base, neck, bezel, screen);
-    monitor.position.set(0, DESK_TOP, -0.35);
+    part(monitor, new T.CylinderGeometry(0.35, 0.4, 0.04, 28), monMat, 0, 0.02, 0);
+    part(monitor, new T.BoxGeometry(0.1, 0.5, 0.08), monMat, 0, 0.27, 0);
+    part(monitor, new T.BoxGeometry(1.9, 1.1, 0.07), monMat, 0, 1.05, 0);
+    part(monitor, new T.PlaneGeometry(1.76, 0.96),
+      new T.MeshBasicMaterial({ map: makeTexture(512, 300, drawScreen) }), 0, 1.05, 0.04);
+    monitor.position.set(0, DESK_TOP, -0.45);
     scene.add(monitor);
     register('monitor', monitor, [monitor], new T.Vector3(0, 2.0, 0));
 
     // --- Notebook (id: notebook) ---
     var notebook = new T.Group();
-    var cover = new T.Mesh(new T.BoxGeometry(0.9, 0.05, 0.65), stdMat(0x6b3a1a, 0x55260a, 0.25, 0.7, 0.1));
-    cover.position.y = 0.025;
-    var pages = new T.Mesh(new T.BoxGeometry(0.84, 0.04, 0.6), stdMat(0xf3e6d3, 0x403020, 0.1, 0.9, 0));
-    pages.position.y = 0.07;
-    var strip = new T.Mesh(new T.BoxGeometry(0.06, 0.07, 0.62), stdMat(0xff8a1f, 0xff8a1f, 0.3, 0.5, 0.1));
-    strip.position.set(-0.42, 0.06, 0);
-    notebook.add(cover, pages, strip);
-    notebook.position.set(-0.85, DESK_TOP, 0.55);
+    part(notebook, new T.BoxGeometry(0.9, 0.05, 0.65), stdMat(0x6b3a1a, 0x55260a, 0.25, 0.7, 0.1), 0, 0.025, 0);
+    part(notebook, new T.BoxGeometry(0.84, 0.04, 0.6), stdMat(0xf3e6d3, 0x403020, 0.1, 0.9, 0), 0, 0.07, 0);
+    part(notebook, new T.BoxGeometry(0.06, 0.07, 0.62), stdMat(0xff8a1f, 0xff8a1f, 0.3, 0.5, 0.1), -0.42, 0.06, 0);
+    notebook.position.set(-1.05, DESK_TOP, 0.7);
     notebook.rotation.y = 0.35;
     scene.add(notebook);
-    register('notebook', notebook, [notebook], new T.Vector3(-0.8, 1.2, 0.5));
+    register('notebook', notebook, [notebook], new T.Vector3(-1.0, 1.2, 0.6));
 
     // --- Chart cube (id: chart-cube) ---
     var cubeGroup = new T.Group();
-    var cubeMesh = new T.Mesh(new T.BoxGeometry(0.5, 0.5, 0.5), stdMat(0x4a2305, 0xff8a1f, 0.3, 0.35, 0.4));
-    var cubeEdges = new T.LineSegments(
-      new T.EdgesGeometry(new T.BoxGeometry(0.52, 0.52, 0.52)),
-      new T.LineBasicMaterial({ color: 0xffb347 })
-    );
-    cubeGroup.add(cubeMesh, cubeEdges);
-    cubeGroup.position.set(1.45, DESK_TOP + 0.4, 0.45);
+    part(cubeGroup, new T.BoxGeometry(0.5, 0.5, 0.5), stdMat(0x4a2305, 0xff8a1f, 0.3, 0.35, 0.4), 0, 0, 0);
+    cubeGroup.add(rgbLine(new T.EdgesGeometry(new T.BoxGeometry(0.52, 0.52, 0.52)), 0.3, 1));
+    cubeGroup.position.set(1.95, DESK_TOP + 0.4, 0.25);
     scene.add(cubeGroup);
-    register('chart-cube', cubeGroup, [cubeGroup], new T.Vector3(1.45, 1.5, 0.4));
+    register('chart-cube', cubeGroup, [cubeGroup], new T.Vector3(1.9, 1.5, 0.3));
 
-    // --- Floating data cards (id: data-cards, three cards) ---
+    // --- Books (id: books) ---
+    var books = new T.Group();
+    part(books, new T.BoxGeometry(1.0, 0.14, 0.7), stdMat(0x8a4a1a, 0x3a1d05, 0.15, 0.7, 0.1), 0, 0.07, 0).rotation.y = 0.05;
+    part(books, new T.BoxGeometry(0.95, 0.12, 0.66), stdMat(0x3b2a1a, 0x1a1006, 0.1, 0.7, 0.1), 0.02, 0.2, 0).rotation.y = -0.08;
+    part(books, new T.BoxGeometry(0.9, 0.12, 0.62), stdMat(0xb5651d, 0x5a2a05, 0.2, 0.7, 0.1), -0.02, 0.32, 0).rotation.y = 0.12;
+    books.position.set(-2.4, DESK_TOP, 0.55);
+    scene.add(books);
+    register('books', books, [books], new T.Vector3(-2.4, 1.3, 0.5));
+
+    // --- Graduation cap on the books (id: grad-cap) ---
+    var cap = new T.Group();
+    var capMat = stdMat(0x1a1410, 0xff8a1f, 0.12, 0.5, 0.2);
+    part(cap, new T.CylinderGeometry(0.17, 0.2, 0.13, 18), capMat, 0, 0.06, 0);
+    var board = part(cap, new T.BoxGeometry(0.62, 0.03, 0.62), capMat, 0, 0.14, 0);
+    board.rotation.y = Math.PI / 4;
+    part(cap, new T.CylinderGeometry(0.008, 0.008, 0.2, 6), stdMat(0xffb347, 0xff8a1f, 0.4, 0.4, 0.3), 0.26, 0.04, 0.0);
+    part(cap, new T.SphereGeometry(0.025, 10, 8), stdMat(0xffb347, 0xff8a1f, 0.5, 0.4, 0.3), 0.26, -0.07, 0);
+    cap.position.set(-2.4, DESK_TOP + 0.38, 0.55);
+    cap.rotation.y = 0.4;
+    scene.add(cap);
+    register('grad-cap', cap, [cap], new T.Vector3(-2.4, 1.6, 0.5));
+
+    // --- Certificate frame (id: certificate, empty placeholder) ---
+    var cert = new T.Group();
+    part(cert, new T.BoxGeometry(0.8, 0.58, 0.04), stdMat(0x6b4a1a, 0xff8a1f, 0.15, 0.4, 0.6), 0, 0.35, 0);
+    part(cert, new T.PlaneGeometry(0.7, 0.48),
+      new T.MeshBasicMaterial({ map: makeTexture(280, 192, drawCertificate) }), 0, 0.35, 0.025);
+    part(cert, new T.BoxGeometry(0.06, 0.3, 0.04), stdMat(0x3b2a1a, 0, 0, 0.6, 0.3), 0, 0.15, -0.08).rotation.x = -0.5;
+    cert.position.set(-2.1, DESK_TOP, -0.65);
+    cert.rotation.y = 0.35;
+    scene.add(cert);
+    register('certificate', cert, [cert], new T.Vector3(-2.1, 1.5, -0.6));
+
+    // --- Plant (id: plant, decoration) ---
+    var plant = new T.Group();
+    part(plant, new T.CylinderGeometry(0.2, 0.15, 0.3, 14), stdMat(0x8a4a1a, 0x2a1205, 0.1, 0.8, 0.1), 0, 0.15, 0);
+    var leafMat = stdMat(0x2f7d4a, 0x103a20, 0.25, 0.6, 0.1);
+    for (var li = 0; li < 6; li++) {
+      var leaf = part(plant, new T.ConeGeometry(0.06, 0.5, 6), leafMat, 0, 0.5, 0);
+      var ang = (li / 6) * Math.PI * 2;
+      leaf.position.x = Math.cos(ang) * 0.1;
+      leaf.position.z = Math.sin(ang) * 0.1;
+      leaf.rotation.z = -Math.cos(ang) * 0.5;
+      leaf.rotation.x = Math.sin(ang) * 0.5;
+    }
+    plant.position.set(-3.0, DESK_TOP, -0.7);
+    scene.add(plant);
+    register('plant', plant, [plant], new T.Vector3(-3.0, 1.5, -0.6));
+
+    // --- Envelope (id: mail) ---
+    var mail = new T.Group();
+    part(mail, new T.BoxGeometry(0.62, 0.04, 0.42), stdMat(0xf6ead8, 0x302010, 0.1, 0.9, 0), 0, 0.02, 0);
+    var mailTop = part(mail, new T.PlaneGeometry(0.62, 0.42),
+      new T.MeshBasicMaterial({ map: makeTexture(248, 168, drawEnvelope) }), 0, 0.042, 0);
+    mailTop.rotation.x = -Math.PI / 2;
+    mail.position.set(1.0, DESK_TOP, 0.85);
+    mail.rotation.y = -0.25;
+    scene.add(mail);
+    register('mail', mail, [mail], new T.Vector3(1.0, 1.2, 0.8));
+
+    // --- Coffee mug (id: mug, decoration) ---
+    var mug = new T.Group();
+    part(mug, new T.CylinderGeometry(0.17, 0.15, 0.3, 20), stdMat(0xf3e6d3, 0x302010, 0.1, 0.5, 0.1), 0, 0.15, 0);
+    part(mug, new T.CylinderGeometry(0.15, 0.15, 0.02, 20), stdMat(0x3a1d0a, 0x1a0a02, 0.1, 0.4, 0), 0, 0.29, 0);
+    var handle = part(mug, new T.TorusGeometry(0.09, 0.025, 8, 14), stdMat(0xf3e6d3, 0x302010, 0.1, 0.5, 0.1), 0.2, 0.15, 0);
+    handle.rotation.z = 0;
+    mug.position.set(1.4, DESK_TOP, -0.8);
+    scene.add(mug);
+    register('mug', mug, [mug], new T.Vector3(1.4, 1.3, -0.7));
+
+    // --- Trophy (id: trophy) ---
+    var trophy = new T.Group();
+    var goldMat = stdMat(0xffb347, 0xff8a1f, 0.35, 0.3, 0.8);
+    part(trophy, new T.BoxGeometry(0.4, 0.08, 0.4), stdMat(0x3b2a1a, 0x1a1006, 0.1, 0.6, 0.2), 0, 0.04, 0);
+    part(trophy, new T.CylinderGeometry(0.05, 0.07, 0.28, 12), goldMat, 0, 0.22, 0);
+    part(trophy, new T.CylinderGeometry(0.2, 0.09, 0.3, 20), goldMat, 0, 0.5, 0);
+    part(trophy, new T.TorusGeometry(0.1, 0.02, 8, 14), goldMat, -0.22, 0.5, 0);
+    part(trophy, new T.TorusGeometry(0.1, 0.02, 8, 14), goldMat, 0.22, 0.5, 0);
+    trophy.position.set(2.85, DESK_TOP, -0.5);
+    scene.add(trophy);
+    register('trophy', trophy, [trophy], new T.Vector3(2.85, 1.6, -0.4));
+
+    // --- Database stack (id: database, decoration) ---
+    var db = new T.Group();
+    var dbMat = stdMat(0x4a2305, 0xff8a1f, 0.35, 0.4, 0.5);
+    [0.06, 0.2, 0.34].forEach(function (y) {
+      part(db, new T.CylinderGeometry(0.24, 0.24, 0.1, 22), dbMat, 0, y, 0);
+    });
+    var dbRing = rgbLine(new T.EdgesGeometry(new T.CylinderGeometry(0.245, 0.245, 0.42, 22), 30), 0.6, 0.8);
+    dbRing.position.y = 0.2;
+    db.add(dbRing);
+    db.position.set(2.95, DESK_TOP, 0.75);
+    scene.add(db);
+    register('database', db, [db], new T.Vector3(2.95, 1.4, 0.7));
+
+    // --- Floating data cards (id: data-cards) ---
     var cardsRoot = new T.Group();
     var cardDefs = [
-      { x: -2.1, y: 2.5, z: 0.3, ry: 0.35, kind: 0, phase: 0 },
-      { x: 2.0, y: 2.6, z: 0.1, ry: -0.35, kind: 1, phase: 2 },
-      { x: 0.6, y: 3.5, z: -0.6, ry: -0.1, kind: 2, phase: 4 }
+      { x: -3.0, y: 2.9, z: 0.2, ry: 0.35, kind: 0, phase: 0 },
+      { x: 3.0, y: 3.0, z: 0.0, ry: -0.35, kind: 1, phase: 2 },
+      { x: 0.9, y: 3.9, z: -0.8, ry: -0.1, kind: 2, phase: 4 }
     ];
     var cardGeo = new T.PlaneGeometry(1.0, 0.64);
     var cardEdgeGeo = new T.EdgesGeometry(cardGeo);
-    var cardEdgeMat = new T.LineBasicMaterial({ color: 0xffb347 });
-    var cardGroups = cardDefs.map(function (d) {
+    var cardGroups = cardDefs.map(function (d, index) {
       var g = new T.Group();
-      var tex = makeTexture(256, 164, drawCard(d.kind));
-      var plane = new T.Mesh(cardGeo, new T.MeshBasicMaterial({ map: tex, side: T.DoubleSide }));
-      g.add(plane, new T.LineSegments(cardEdgeGeo, cardEdgeMat));
+      var plane = new T.Mesh(cardGeo, new T.MeshBasicMaterial({
+        map: makeTexture(256, 164, drawCard(d.kind)), side: T.DoubleSide
+      }));
+      g.add(plane, rgbLine(cardEdgeGeo, index * 0.15, 1));
       g.position.set(d.x, d.y, d.z);
       g.rotation.y = d.ry;
       g.userData.baseY = d.y;
@@ -820,59 +1143,86 @@
     scene.add(cardsRoot);
     register('data-cards', cardsRoot, cardGroups, new T.Vector3(0.3, 2.8, 0));
 
-    // --- Lamp with pull cord (cord id: cord) ---
-    var lampX = -1.5;
+    // --- Lamp with pull rope (rope id: cord) ---
+    var lampX = -1.6;
     var lamp = new T.Group();
-    var wire = new T.Mesh(new T.CylinderGeometry(0.012, 0.012, 1.8, 6), stdMat(0x6b5642, 0, 0, 0.8, 0.2));
-    wire.position.set(lampX, 3.8, 0.05);
+    var wire = new T.Mesh(new T.CylinderGeometry(0.012, 0.012, 2.2, 6), stdMat(0x6b5642, 0, 0, 0.8, 0.2));
+    wire.position.set(lampX, 4.2, 0.05);
     var shade = new T.Mesh(
       new T.ConeGeometry(0.42, 0.38, 28, 1, true),
       new T.MeshStandardMaterial({ color: 0x2a1b10, emissive: 0xffe0b0, emissiveIntensity: 0,
         roughness: 0.5, metalness: 0.4, side: T.DoubleSide })
     );
-    shade.position.set(lampX, 2.98, 0.05);
+    shade.position.set(lampX, 3.0, 0.05);
     var bulbMat = new T.MeshStandardMaterial({ color: 0x8a8580, emissive: 0xffe0b0,
       emissiveIntensity: 0.1, roughness: 0.3, metalness: 0 });
     var bulb = new T.Mesh(new T.SphereGeometry(0.12, 18, 14), bulbMat);
-    bulb.position.set(lampX, 2.82, 0.05);
+    bulb.position.set(lampX, 2.84, 0.05);
     lamp.add(wire, shade, bulb);
+
+    // Soft glow around the bulb (a flat picture that always faces the camera)
+    var glowMat = new T.SpriteMaterial({
+      map: makeTexture(128, 128, drawGlow), transparent: true, opacity: 0,
+      depthWrite: false, blending: T.AdditiveBlending
+    });
+    var glow = new T.Sprite(glowMat);
+    glow.position.copy(bulb.position);
+    glow.scale.set(1.2, 1.2, 1);
+    lamp.add(glow);
+
+    // Cone of light falling onto the desk
+    var coneMat = new T.MeshBasicMaterial({
+      color: 0xffd9a0, transparent: true, opacity: 0, depthWrite: false,
+      side: T.DoubleSide, blending: T.AdditiveBlending
+    });
+    var lightCone = new T.Mesh(new T.ConeGeometry(1.25, 1.85, 32, 1, true), coneMat);
+    lightCone.position.set(lampX, 1.9, 0.05);
+    lamp.add(lightCone);
+
     scene.add(lamp);
     lampLight.position.copy(bulb.position);
 
-    // Cord: a thin line plus a bright knob. The cord is the clickable part.
-    var cordBaseY = 2.74;
+    // The rope: beads on a string and a glowing knob. The rope is the clickable part.
+    var cordBaseY = 2.78;
     var cordGroup = new T.Group();
-    cordGroup.position.set(lampX + 0.28, cordBaseY, 0.05);
-    var cordLine = new T.Mesh(new T.CylinderGeometry(0.012, 0.012, 0.9, 6), stdMat(0xd8cbbd, 0, 0, 0.8, 0));
+    cordGroup.position.set(lampX + 0.3, cordBaseY, 0.05);
+    var cordLine = new T.Mesh(new T.CylinderGeometry(0.014, 0.014, 0.9, 6), stdMat(0xe8dccd, 0, 0, 0.8, 0));
     cordLine.position.y = -0.45;
-    var knob = new T.Mesh(new T.SphereGeometry(0.075, 16, 12), stdMat(0xff8a1f, 0xff8a1f, 0.9, 0.3, 0.2));
-    knob.position.y = -0.95;
-    // Invisible fatter shape so a finger can hit the thin cord easily
+    cordGroup.add(cordLine);
+    var beadGeo = new T.SphereGeometry(0.028, 8, 6);
+    var beadMat = stdMat(0xc9b49a, 0, 0, 0.7, 0.1);
+    for (var bi = 0; bi < 6; bi++) {
+      part(cordGroup, beadGeo, beadMat, 0, -0.1 - bi * 0.13, 0);
+    }
+    var knob = new T.Mesh(new T.SphereGeometry(0.085, 16, 12), stdMat(0xff8a1f, 0xff8a1f, 0.9, 0.3, 0.2));
+    knob.position.y = -0.97;
+    cordGroup.add(knob);
+    // Invisible fatter shape so a finger can hit the thin rope easily
     var cordHit = new T.Mesh(
-      new T.CylinderGeometry(0.25, 0.25, 1.4, 10),
+      new T.CylinderGeometry(0.26, 0.26, 1.4, 10),
       new T.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
     );
     cordHit.position.y = -0.6;
-    cordGroup.add(cordLine, knob, cordHit);
+    cordGroup.add(cordHit);
     scene.add(cordGroup);
     register('cord', cordGroup, [cordGroup], new T.Vector3(lampX, 2.0, 0));
 
-    // --- Ambient particles (cheap: one Points object that turns slowly) ---
+    // --- Ambient particles ---
     var count = smallScreen ? CONFIG.particleCountSmall : CONFIG.particleCount;
     var positions = new Float32Array(count * 3);
     for (var i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 11;
-      positions[i * 3 + 1] = 0.4 + Math.random() * 4.6;
+      positions[i * 3] = (Math.random() - 0.5) * 13;
+      positions[i * 3 + 1] = 0.4 + Math.random() * 5;
       positions[i * 3 + 2] = -3.5 + Math.random() * 6;
     }
     var particleGeo = new T.BufferGeometry();
     particleGeo.setAttribute('position', new T.BufferAttribute(positions, 3));
     var particles = new T.Points(particleGeo, new T.PointsMaterial({
-      color: 0xffb347, size: 0.045, transparent: true, opacity: 0.55, depthWrite: false
+      color: 0xffb347, size: 0.05, transparent: true, opacity: 0.55, depthWrite: false
     }));
     scene.add(particles);
 
-    // Which values can be animated, and where they should go
+    // Animated values
     var lampLevel = 0, lampTarget = 0, pull = 0;
     var hoverId = null, focusId = null;
     var cam = { x: CONFIG.camera.x, y: CONFIG.camera.y, z: CONFIG.camera.z,
@@ -882,7 +1232,6 @@
     var paused = false, visible = !document.hidden, inView = true;
     var rafId = null, lastTime = 0, forceRender = true, destroyed = false;
 
-    /* ---- animation helper: move a number toward a target smoothly ---- */
     function approach(current, target, rate, dt) {
       var d = target - current;
       if (Math.abs(d) < 0.0005) { return target; }
@@ -890,7 +1239,7 @@
       return current + d * (1 - Math.exp(-rate * dt));
     }
 
-    /* How far the page has scrolled past the hero: 0 (top) to 1 (gone). */
+    /* How far the page has scrolled past the hero: 0 (top) to 1. */
     function scrollProgress() {
       if (reducedMotion || !CONFIG.scrollStrength) { return 0; }
       var h = container.offsetHeight || 1;
@@ -901,31 +1250,40 @@
        PER-FRAME UPDATE
        ====================================================== */
     function update(dt, seconds) {
-      // Lamp brightness and glow follow the light switch smoothly
+      // Lamp: light, bulb, glow and light cone follow the switch smoothly
       lampLevel = approach(lampLevel, lampTarget, 5, dt);
       lampLight.intensity = lampLevel * CONFIG.lampIntensity;
       bulbMat.emissiveIntensity = 0.1 + lampLevel * 3;
       bulbMat.color.setHex(lampLevel > 0.5 ? 0xfff2cc : 0x8a8580);
       shade.material.emissiveIntensity = lampLevel * 0.35;
       hemi.intensity = 0.55 + lampLevel * 0.25;
+      glowMat.opacity = lampLevel * 0.95;
+      glow.scale.set(1.0 + lampLevel * 0.7, 1.0 + lampLevel * 0.7, 1);
+      coneMat.opacity = lampLevel * 0.1;
 
-      // Cord dips when pulled, then springs back
+      // Rope dips when pulled, then springs back
       pull = approach(pull, 0, 6, dt);
-      cordGroup.position.y = cordBaseY - pull * 0.14;
+      cordGroup.position.y = cordBaseY - pull * 0.16;
+      cordGroup.scale.y = 1 + pull * 0.12;
 
       // Hover and selection feedback (scale + glow)
       Object.keys(entries).forEach(function (id) {
         var e = entries[id];
         var target = Math.max(hoverId === id ? 0.7 : 0, selectedId === id ? 1 : 0);
         e.level = approach(e.level, target, 9, dt);
-        var s = 1 + e.level * 0.06;
-        e.targets.forEach(function (obj) { obj.scale.set(s, s, s); });
+        var s = 1 + e.level * 0.07;
+        e.targets.forEach(function (obj) {
+          obj.scale.set(s, id === 'cord' ? s * (1 + pull * 0.12) : s, s);
+        });
         e.mats.forEach(function (m) { m.emissiveIntensity = m.userData.baseEI + e.level * 0.6; });
       });
 
-      // Gentle idle motion (skipped for reduced motion)
       var sway = 0;
       if (!reducedMotion) {
+        // RGB colour cycling on the glowing outlines
+        rgbMaterials.forEach(function (r) {
+          r.mat.color.setHSL((seconds * 0.07 + r.offset) % 1, 0.9, 0.6);
+        });
         floaters.forEach(function (g) {
           g.position.y = g.userData.baseY + Math.sin(seconds * 0.8 + g.userData.phase) * CONFIG.floatAmount;
         });
@@ -934,9 +1292,11 @@
         particles.rotation.y += dt * 0.015;
         sway = Math.sin(seconds * 0.3) * CONFIG.idleSway;
         changed = true;
+      } else {
+        rgbMaterials.forEach(function (r) { r.mat.color.setHSL(0.08, 0.9, 0.6); });
       }
 
-      // Camera: parallax + idle sway + scroll, and a soft look toward the selected object
+      // Camera: mouse parallax + idle sway + scroll
       var sp = scrollProgress();
       var px = reducedMotion ? 0 : parallax.x * CONFIG.parallaxStrength;
       var py = reducedMotion ? 0 : parallax.y * CONFIG.parallaxStrength * 0.5;
@@ -945,9 +1305,9 @@
       var lookY = CONFIG.lookAt.y + (focus ? (focus.y - CONFIG.lookAt.y) * 0.3 : 0);
       var lookZ = CONFIG.lookAt.z;
 
-      cam.x = approach(cam.x, CONFIG.camera.x + px + sway + sp * 1.6, 4, dt);
+      cam.x = approach(cam.x, CONFIG.camera.x + px + sway + sp * 1.8, 4, dt);
       cam.y = approach(cam.y, CONFIG.camera.y + py + sp * 0.5, 4, dt);
-      cam.z = approach(cam.z, CONFIG.camera.z * zoomFactor * (1 + sp * 0.3), 4, dt);
+      cam.z = approach(cam.z, CONFIG.camera.z * zoomFactor * (1 + sp * 0.25), 4, dt);
       cam.lx = approach(cam.lx, lookX, 4, dt);
       cam.ly = approach(cam.ly, lookY, 4, dt);
       cam.lz = approach(cam.lz, lookZ, 4, dt);
@@ -957,7 +1317,6 @@
 
     /* ======================================================
        RENDER LOOP (only one can ever run)
-       Runs only while: page visible, scene on screen, not paused.
        ====================================================== */
     function frame(now) {
       rafId = null;
@@ -987,10 +1346,9 @@
     function resize() {
       var w = mount.clientWidth, h = mount.clientHeight;
       if (!w || !h) { return; }
-      renderer.setSize(w, h, false);          // CSS already sizes the canvas to 100%
+      renderer.setSize(w, h, false);
       camera.aspect = w / h;
-      // On narrow, tall shapes move the camera back so everything stays in view
-      zoomFactor = Math.max(1, 1.35 / camera.aspect);
+      zoomFactor = Math.max(1, 1.4 / camera.aspect);
       camera.updateProjectionMatrix();
       forceRender = true;
       startLoop();
@@ -1004,10 +1362,7 @@
     }
 
     /* ======================================================
-       POINTER INTERACTION
-       - Tap or click: picks the object under the finger.
-       - Mouse move: hover glow and camera parallax.
-       - Page scrolling is never blocked (no preventDefault).
+       POINTER INTERACTION (never blocks page scrolling)
        ====================================================== */
     function pick(clientX, clientY) {
       var rect = canvas.getBoundingClientRect();
@@ -1016,7 +1371,6 @@
       pointerNdc.y = -((clientY - rect.top) / rect.height) * 2 + 1;
       camera.updateMatrixWorld();
       raycaster.setFromCamera(pointerNdc, camera);
-      // Only registered objects are tested, so decoration never blocks a click
       var hits = raycaster.intersectObjects(hitMeshes, false);
       return hits.length ? hits[0].object.userData.objectId : null;
     }
@@ -1031,7 +1385,7 @@
       var moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
       var elapsed = performance.now() - down.t;
       down = null;
-      if (moved > CONFIG.tapMovePx || elapsed > CONFIG.tapMaxMs) { return; }   // it was a scroll or drag
+      if (moved > CONFIG.tapMovePx || elapsed > CONFIG.tapMaxMs) { return; }
       var id = pick(e.clientX, e.clientY);
       if (id) { activateObject(id); }
     });
@@ -1133,7 +1487,7 @@
 
 
   /* ========================================================
-     SECTION 13 - START EVERYTHING (each feature runs once)
+     SECTION 15 - START EVERYTHING (each feature runs once)
      ======================================================== */
   function init() {
     markJsReady();
@@ -1143,7 +1497,10 @@
     secureExternalLinks();
     initBackToTop();
     initReveal();
+    initRgbPause();
+    initStretch();
     initSceneControls();
+    initRopeDrag();
     runDebugReport();
     initScene();       // last, because it is the heaviest and may fail
   }
