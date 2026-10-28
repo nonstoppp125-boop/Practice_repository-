@@ -1,11 +1,13 @@
 /* ==========================================================
    script.js  |  Futuristic Data Analyst Learning Portfolio
+   ORANGE THEME
    ----------------------------------------------------------
    WHAT THIS FILE DOES
    1. Mobile menu, active menu link, footer year, scroll reveal.
    2. Loads Three.js and builds a 3D desk scene in code.
    3. Lets visitors click or tap 3D objects, and use real HTML
       buttons that do exactly the same things.
+   4. Moves the camera a little as the page scrolls.
 
    BEGINNER NOTES
    - Settings you can safely change are in the CONFIG block.
@@ -18,8 +20,7 @@
 (function () {
   'use strict';
 
-  /* Protect against running twice (for example if the script
-     file were accidentally included two times). */
+  /* Protect against running twice. */
   if (document.documentElement.dataset.portfolioInit === '1') {
     return;
   }
@@ -41,6 +42,7 @@
     particleCountSmall: 45,        // floating dots (phones)
 
     parallaxStrength: 0.55,        // how much the camera follows the mouse
+    scrollStrength: 1,             // how much the camera moves while scrolling (0 = off)
     idleSway: 0.1,                 // slow camera drift when mouse is not used
     floatAmount: 0.06,             // how far floating cards bob up and down
 
@@ -96,7 +98,6 @@
 
   /* ========================================================
      SECTION 3 - PAGE STATE (no-js -> js-ready)
-     style.css hides reveal items only when body has js-ready.
      ======================================================== */
   function markJsReady() {
     document.body.classList.remove('no-js');
@@ -107,7 +108,6 @@
   /* ========================================================
      SECTION 4 - MOBILE NAVIGATION
      Needs: #nav-toggle (button) and #site-nav.
-     The button toggles aria-expanded; style.css opens the panel.
      ======================================================== */
   function initMobileNav() {
     var toggle = $('#nav-toggle');
@@ -160,8 +160,6 @@
 
   /* ========================================================
      SECTION 5 - HEADER SHADOW AND ACTIVE NAV LINK
-     Adds is-scrolled to #site-header, and is-active plus
-     aria-current to the link of the section being read.
      ======================================================== */
   function initScrollState() {
     var header = $('#site-header');
@@ -238,8 +236,7 @@
     });
   }
 
-  // The back-to-top link (#back-to-top) is a normal anchor to #home.
-  // After it is used, move keyboard focus to the top so screen readers follow.
+  // After back-to-top is used, move keyboard focus to the top
   function initBackToTop() {
     var link = $('#back-to-top');
     var home = $('#home');
@@ -301,7 +298,7 @@
      HOW TO ADD A NEW INTERACTIVE OBJECT
      1. Add an entry below with a unique id.
         action 'section' needs a target such as '#projects'.
-     2. In buildWorkspace (Section 13) create the 3D shape and call
+     2. In createScene (Section 12) create the 3D shape and call
         register('your-id', group).
      3. In index.html add a button with data-scene-object="your-id"
         and data-target="#section".
@@ -585,6 +582,7 @@
      SECTION 12 - THE 3D SCENE
      createScene builds the renderer, camera, lights and objects,
      then returns a small API used by the HTML side above.
+     Colours here are hex numbers like 0xff8a1f (orange).
      ======================================================== */
   function createScene(T, container, mount) {
 
@@ -617,12 +615,12 @@
     var pointerNdc = new T.Vector2();
 
     /* ---- lights ---- */
-    var hemi = new T.HemisphereLight(0x6aa8ff, 0x0a1020, 0.55);
+    var hemi = new T.HemisphereLight(0xffa862, 0x140a04, 0.55);
     scene.add(hemi);
-    var key = new T.DirectionalLight(0x9fdcff, 0.9);
+    var key = new T.DirectionalLight(0xffd2a8, 0.9);
     key.position.set(3, 5, 4);
     scene.add(key);
-    var lampLight = new T.PointLight(0xffcf70, 0, 0, 2);   // the lamp: off until switched on
+    var lampLight = new T.PointLight(0xffe0b0, 0, 0, 2);   // the lamp: off until switched on
     scene.add(lampLight);
 
     /* ---- shared bookkeeping ---- */
@@ -665,40 +663,40 @@
 
     /* ---- decorative textures (abstract shapes, NOT real data) ---- */
     function drawScreen(ctx, w, h) {
-      ctx.fillStyle = '#07121f'; ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = '#0d2236'; ctx.fillRect(0, 0, w, 34);
-      ctx.fillStyle = '#67e8f9'; ctx.font = '16px sans-serif';
+      ctx.fillStyle = '#120b06'; ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#26160a'; ctx.fillRect(0, 0, w, 34);
+      ctx.fillStyle = '#ffb347'; ctx.font = '16px sans-serif';
       ctx.fillText('SAMPLE VISUAL (decorative)', 14, 23);
       var bars = [0.35, 0.55, 0.42, 0.7, 0.5, 0.82, 0.62, 0.9];
       for (var i = 0; i < bars.length; i++) {
         var bh = bars[i] * (h - 120);
-        ctx.fillStyle = i % 2 ? '#22d3ee' : '#38bdf8';
+        ctx.fillStyle = i % 2 ? '#ff8a1f' : '#ffa94d';
         ctx.fillRect(28 + i * 52, h - 28 - bh, 34, bh);
       }
-      ctx.strokeStyle = '#8b7cff'; ctx.lineWidth = 3; ctx.beginPath();
+      ctx.strokeStyle = '#ffe2a8'; ctx.lineWidth = 3; ctx.beginPath();
       for (var j = 0; j < bars.length; j++) {
         var x = 45 + j * 52, y = h - 70 - bars[(j + 3) % bars.length] * (h - 160);
         if (j === 0) { ctx.moveTo(x, y); } else { ctx.lineTo(x, y); }
       }
       ctx.stroke();
-      ctx.strokeStyle = 'rgba(148,190,230,0.3)'; ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(255,200,150,0.3)'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(20, h - 28); ctx.lineTo(w - 14, h - 28); ctx.stroke();
     }
 
     function drawCard(kind) {
       return function (ctx, w, h) {
         var g = ctx.createLinearGradient(0, 0, w, h);
-        g.addColorStop(0, '#12233d'); g.addColorStop(1, '#0a1424');
+        g.addColorStop(0, '#2c1a0d'); g.addColorStop(1, '#150c06');
         ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = '#67e8f9'; ctx.fillRect(14, 14, 60, 6);
-        ctx.fillStyle = 'rgba(183,199,218,0.5)'; ctx.fillRect(14, 28, 110, 4);
+        ctx.fillStyle = '#ffb347'; ctx.fillRect(14, 14, 60, 6);
+        ctx.fillStyle = 'rgba(226,208,187,0.5)'; ctx.fillRect(14, 28, 110, 4);
         if (kind === 0) {
           [0.4, 0.7, 0.5, 0.9, 0.6].forEach(function (v, i) {
-            ctx.fillStyle = '#22d3ee';
+            ctx.fillStyle = '#ff8a1f';
             ctx.fillRect(24 + i * 40, h - 18 - v * 80, 26, v * 80);
           });
         } else if (kind === 1) {
-          ctx.strokeStyle = '#8b7cff'; ctx.lineWidth = 4; ctx.beginPath();
+          ctx.strokeStyle = '#ff5a36'; ctx.lineWidth = 4; ctx.beginPath();
           [0.3, 0.55, 0.4, 0.75, 0.6, 0.9].forEach(function (v, i) {
             var x = 20 + i * 40, y = h - 20 - v * 85;
             if (i === 0) { ctx.moveTo(x, y); } else { ctx.lineTo(x, y); }
@@ -706,12 +704,12 @@
           ctx.stroke();
         } else {
           ctx.lineWidth = 16;
-          ctx.strokeStyle = '#22d3ee'; ctx.beginPath();
+          ctx.strokeStyle = '#ff8a1f'; ctx.beginPath();
           ctx.arc(w / 2, h / 2 + 12, 42, -Math.PI / 2, Math.PI * 0.9); ctx.stroke();
-          ctx.strokeStyle = '#8b7cff'; ctx.beginPath();
+          ctx.strokeStyle = '#ffd166'; ctx.beginPath();
           ctx.arc(w / 2, h / 2 + 12, 42, Math.PI * 0.95, Math.PI * 1.5); ctx.stroke();
         }
-        ctx.strokeStyle = 'rgba(103,232,249,0.5)'; ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(255,179,71,0.55)'; ctx.lineWidth = 2;
         ctx.strokeRect(1, 1, w - 2, h - 2);
       };
     }
@@ -734,11 +732,11 @@
 
     // --- Desk (not clickable) ---
     var desk = new T.Group();
-    var deskTop = new T.Mesh(new T.BoxGeometry(4.6, 0.14, 2.0), stdMat(0x1b2a44, 0x000000, 0, 0.55, 0.25));
+    var deskTop = new T.Mesh(new T.BoxGeometry(4.6, 0.14, 2.0), stdMat(0x2e2014, 0x000000, 0, 0.55, 0.25));
     deskTop.position.y = 1.0;
     desk.add(deskTop);
     var legGeo = new T.BoxGeometry(0.12, 1.0, 0.12);
-    var legMat = stdMat(0x142038, 0x000000, 0, 0.7, 0.3);
+    var legMat = stdMat(0x221810, 0x000000, 0, 0.7, 0.3);
     [[-2.15, 0.5, -0.9], [2.15, 0.5, -0.9], [-2.15, 0.5, 0.9], [2.15, 0.5, 0.9]].forEach(function (p) {
       var leg = new T.Mesh(legGeo, legMat);
       leg.position.set(p[0], p[1], p[2]);
@@ -746,7 +744,7 @@
     });
     var edge = new T.LineSegments(
       new T.EdgesGeometry(new T.BoxGeometry(4.6, 0.14, 2.0)),
-      new T.LineBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: 0.45 })
+      new T.LineBasicMaterial({ color: 0xff8a1f, transparent: true, opacity: 0.5 })
     );
     edge.position.y = 1.0;
     desk.add(edge);
@@ -754,7 +752,7 @@
 
     // --- Monitor (id: monitor) ---
     var monitor = new T.Group();
-    var monMat = stdMat(0x0f1a2e, 0x0a2a3a, 0.2, 0.4, 0.5);
+    var monMat = stdMat(0x1c140d, 0x3a1d05, 0.2, 0.4, 0.5);
     var base = new T.Mesh(new T.CylinderGeometry(0.35, 0.4, 0.04, 28), monMat);
     base.position.y = 0.02;
     var neck = new T.Mesh(new T.BoxGeometry(0.1, 0.5, 0.08), monMat);
@@ -772,11 +770,11 @@
 
     // --- Notebook (id: notebook) ---
     var notebook = new T.Group();
-    var cover = new T.Mesh(new T.BoxGeometry(0.9, 0.05, 0.65), stdMat(0x2a3d6b, 0x1a2a55, 0.25, 0.7, 0.1));
+    var cover = new T.Mesh(new T.BoxGeometry(0.9, 0.05, 0.65), stdMat(0x6b3a1a, 0x55260a, 0.25, 0.7, 0.1));
     cover.position.y = 0.025;
-    var pages = new T.Mesh(new T.BoxGeometry(0.84, 0.04, 0.6), stdMat(0xdbe7f5, 0x203040, 0.1, 0.9, 0));
+    var pages = new T.Mesh(new T.BoxGeometry(0.84, 0.04, 0.6), stdMat(0xf3e6d3, 0x403020, 0.1, 0.9, 0));
     pages.position.y = 0.07;
-    var strip = new T.Mesh(new T.BoxGeometry(0.06, 0.07, 0.62), stdMat(0x22d3ee, 0x22d3ee, 0.3, 0.5, 0.1));
+    var strip = new T.Mesh(new T.BoxGeometry(0.06, 0.07, 0.62), stdMat(0xff8a1f, 0xff8a1f, 0.3, 0.5, 0.1));
     strip.position.set(-0.42, 0.06, 0);
     notebook.add(cover, pages, strip);
     notebook.position.set(-0.85, DESK_TOP, 0.55);
@@ -786,10 +784,10 @@
 
     // --- Chart cube (id: chart-cube) ---
     var cubeGroup = new T.Group();
-    var cubeMesh = new T.Mesh(new T.BoxGeometry(0.5, 0.5, 0.5), stdMat(0x0e3a4a, 0x22d3ee, 0.3, 0.35, 0.4));
+    var cubeMesh = new T.Mesh(new T.BoxGeometry(0.5, 0.5, 0.5), stdMat(0x4a2305, 0xff8a1f, 0.3, 0.35, 0.4));
     var cubeEdges = new T.LineSegments(
       new T.EdgesGeometry(new T.BoxGeometry(0.52, 0.52, 0.52)),
-      new T.LineBasicMaterial({ color: 0x67e8f9 })
+      new T.LineBasicMaterial({ color: 0xffb347 })
     );
     cubeGroup.add(cubeMesh, cubeEdges);
     cubeGroup.position.set(1.45, DESK_TOP + 0.4, 0.45);
@@ -805,7 +803,7 @@
     ];
     var cardGeo = new T.PlaneGeometry(1.0, 0.64);
     var cardEdgeGeo = new T.EdgesGeometry(cardGeo);
-    var cardEdgeMat = new T.LineBasicMaterial({ color: 0x67e8f9 });
+    var cardEdgeMat = new T.LineBasicMaterial({ color: 0xffb347 });
     var cardGroups = cardDefs.map(function (d) {
       var g = new T.Group();
       var tex = makeTexture(256, 164, drawCard(d.kind));
@@ -825,15 +823,15 @@
     // --- Lamp with pull cord (cord id: cord) ---
     var lampX = -1.5;
     var lamp = new T.Group();
-    var wire = new T.Mesh(new T.CylinderGeometry(0.012, 0.012, 1.8, 6), stdMat(0x445670, 0, 0, 0.8, 0.2));
+    var wire = new T.Mesh(new T.CylinderGeometry(0.012, 0.012, 1.8, 6), stdMat(0x6b5642, 0, 0, 0.8, 0.2));
     wire.position.set(lampX, 3.8, 0.05);
     var shade = new T.Mesh(
       new T.ConeGeometry(0.42, 0.38, 28, 1, true),
-      new T.MeshStandardMaterial({ color: 0x16243d, emissive: 0xffcf70, emissiveIntensity: 0,
+      new T.MeshStandardMaterial({ color: 0x2a1b10, emissive: 0xffe0b0, emissiveIntensity: 0,
         roughness: 0.5, metalness: 0.4, side: T.DoubleSide })
     );
     shade.position.set(lampX, 2.98, 0.05);
-    var bulbMat = new T.MeshStandardMaterial({ color: 0x8a8f98, emissive: 0xffcf70,
+    var bulbMat = new T.MeshStandardMaterial({ color: 0x8a8580, emissive: 0xffe0b0,
       emissiveIntensity: 0.1, roughness: 0.3, metalness: 0 });
     var bulb = new T.Mesh(new T.SphereGeometry(0.12, 18, 14), bulbMat);
     bulb.position.set(lampX, 2.82, 0.05);
@@ -845,9 +843,9 @@
     var cordBaseY = 2.74;
     var cordGroup = new T.Group();
     cordGroup.position.set(lampX + 0.28, cordBaseY, 0.05);
-    var cordLine = new T.Mesh(new T.CylinderGeometry(0.012, 0.012, 0.9, 6), stdMat(0xcbd5e1, 0, 0, 0.8, 0));
+    var cordLine = new T.Mesh(new T.CylinderGeometry(0.012, 0.012, 0.9, 6), stdMat(0xd8cbbd, 0, 0, 0.8, 0));
     cordLine.position.y = -0.45;
-    var knob = new T.Mesh(new T.SphereGeometry(0.075, 16, 12), stdMat(0x22d3ee, 0x22d3ee, 0.9, 0.3, 0.2));
+    var knob = new T.Mesh(new T.SphereGeometry(0.075, 16, 12), stdMat(0xff8a1f, 0xff8a1f, 0.9, 0.3, 0.2));
     knob.position.y = -0.95;
     // Invisible fatter shape so a finger can hit the thin cord easily
     var cordHit = new T.Mesh(
@@ -870,7 +868,7 @@
     var particleGeo = new T.BufferGeometry();
     particleGeo.setAttribute('position', new T.BufferAttribute(positions, 3));
     var particles = new T.Points(particleGeo, new T.PointsMaterial({
-      color: 0x67e8f9, size: 0.045, transparent: true, opacity: 0.55, depthWrite: false
+      color: 0xffb347, size: 0.045, transparent: true, opacity: 0.55, depthWrite: false
     }));
     scene.add(particles);
 
@@ -892,6 +890,13 @@
       return current + d * (1 - Math.exp(-rate * dt));
     }
 
+    /* How far the page has scrolled past the hero: 0 (top) to 1 (gone). */
+    function scrollProgress() {
+      if (reducedMotion || !CONFIG.scrollStrength) { return 0; }
+      var h = container.offsetHeight || 1;
+      return clamp(window.scrollY / (h * 1.4), 0, 1) * CONFIG.scrollStrength;
+    }
+
     /* ======================================================
        PER-FRAME UPDATE
        ====================================================== */
@@ -900,7 +905,7 @@
       lampLevel = approach(lampLevel, lampTarget, 5, dt);
       lampLight.intensity = lampLevel * CONFIG.lampIntensity;
       bulbMat.emissiveIntensity = 0.1 + lampLevel * 3;
-      bulbMat.color.setHex(lampLevel > 0.5 ? 0xfff2cc : 0x8a8f98);
+      bulbMat.color.setHex(lampLevel > 0.5 ? 0xfff2cc : 0x8a8580);
       shade.material.emissiveIntensity = lampLevel * 0.35;
       hemi.intensity = 0.55 + lampLevel * 0.25;
 
@@ -931,17 +936,18 @@
         changed = true;
       }
 
-      // Camera: parallax + idle sway, and a soft look toward the selected object
+      // Camera: parallax + idle sway + scroll, and a soft look toward the selected object
+      var sp = scrollProgress();
       var px = reducedMotion ? 0 : parallax.x * CONFIG.parallaxStrength;
       var py = reducedMotion ? 0 : parallax.y * CONFIG.parallaxStrength * 0.5;
       var focus = focusId && entries[focusId] ? entries[focusId].focus : null;
-      var lookX = CONFIG.lookAt.x + (focus ? (focus.x - CONFIG.lookAt.x) * 0.3 : 0);
+      var lookX = CONFIG.lookAt.x + (focus ? (focus.x - CONFIG.lookAt.x) * 0.3 : 0) + sp * 0.5;
       var lookY = CONFIG.lookAt.y + (focus ? (focus.y - CONFIG.lookAt.y) * 0.3 : 0);
       var lookZ = CONFIG.lookAt.z;
 
-      cam.x = approach(cam.x, CONFIG.camera.x + px + sway, 4, dt);
-      cam.y = approach(cam.y, CONFIG.camera.y + py, 4, dt);
-      cam.z = approach(cam.z, CONFIG.camera.z * zoomFactor, 4, dt);
+      cam.x = approach(cam.x, CONFIG.camera.x + px + sway + sp * 1.6, 4, dt);
+      cam.y = approach(cam.y, CONFIG.camera.y + py + sp * 0.5, 4, dt);
+      cam.z = approach(cam.z, CONFIG.camera.z * zoomFactor * (1 + sp * 0.3), 4, dt);
       cam.lx = approach(cam.lx, lookX, 4, dt);
       cam.ly = approach(cam.ly, lookY, 4, dt);
       cam.lz = approach(cam.lz, lookZ, 4, dt);
@@ -1053,6 +1059,12 @@
       setHover(null);
       startLoop();
     });
+
+    // Scrolling moves the camera a little (passive: never blocks scrolling)
+    listen(window, 'scroll', function () {
+      forceRender = true;
+      startLoop();
+    }, { passive: true });
 
     /* ======================================================
        VISIBILITY, SCREEN POSITION, CONTEXT LOSS
